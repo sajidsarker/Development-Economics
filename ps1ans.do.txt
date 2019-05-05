@@ -1,0 +1,170 @@
+** solution to empirical exercise, ps 1
+#delim ;
+clear;
+set matsize 150;
+set mem 10m;
+cap log close;
+log using ps1, replace;
+
+
+version 9.0;
+
+use burkina731;
+
+*generate appropriate fixed effects;
+   gen vcyrfe = (village*100+fcrop)*10+year;
+   gen hhcyrfe=vcyrfe*100+hhn;
+
+*go from output to yield;
+   gen lnyield=lnvalue-lnarea ;
+
+*do fe regressions and generate residuals;
+   xtreg lnyield topo* soil* loc* lnarea, fe i(vcyrfe);
+   predict villres, e;
+   xtreg lnyield topo* soil* loc* lnarea, fe i(hhcyrfe);
+   predict hhres, e;
+
+
+*note that there's a problem --- lots of small clusters (1 observation) which
+*of course are predicted perfectly.  Get rid of those in the next line;
+
+   for var hhres villres: replace X=. if X==0;
+
+*estimate densities for question a;
+   kdensity villres, n(200) gen(pts villdensity);
+   kdensity hhres, at(pts) gen(dummy hhdensity) ;
+   drop dummy;
+
+*graph it;
+   la var villdensity "vill-crop-year fixed effects";
+   la var hhdensity "hh-crop-year fixed effects" ;
+   la var pts "deviation from predicted yield";
+
+twoway connected hhdensity villdensity pts if pts>-2 & pts<2, ms(i i)
+  l1("Kernel Density Estimate")
+  b1("       Question 3      ");
+more;
+
+
+
+
+*test for equal distributions.  Lots of ways to do it ;
+keep villres hhres;
+gen vill=1;
+save temp, replace;
+replace vill=0;
+gen resid = hhres ;
+append using temp;
+replace resid =villres if vill==1;
+
+ksmirnov resid, by(vill);
+
+clear;
+use burkina731;
+*question 4 is trivial .... it's the interpretation that's interesting  ;
+*generate appropriate fixed effects;
+   gen vcyrfe = (village*100+fcrop)*10+year;
+   gen hhcyrfe=vcyrfe*100+hhn;
+
+*go from output to yield;
+   gen lnyield=lnvalue-lnarea ;
+
+   xtreg lnyield topo* soil* loc* lnarea lnhhsize, fe i(vcyrfe);
+   xtreg lnyield topo* soil* loc* lnarea lntarea, fe i(vcyrfe);
+
+*we see a big, strong effect of area on OTHER plots - not the current plot
+*on yields on the current plot.  This certainly doesn't look like labor market constraints,
+*nor does it look like the same kind of land quality issue as in problem 2.
+*Instead, it looks a bit more like capital constraints, maybe?  Richer households
+*have better access to land AND to capital, so they get better yields.;
+
+**the advantage of the following is that it gives you (7) at every x****
+
+*lowrex takes 7 arguments:
+*  1 - dep
+*  2 - indep
+*  3 - output, the estimate of g(x)
+*  4 - output, estimate of Dg(x)
+*  5 - bandwidth
+*  6 - grid of points at which to estimate g(x)
+*  7 - predicted value of dep at every x  ;
+
+/* the locally-weighted regression code */
+version 7.0 ;
+cap program drop lowrex;
+program def lowrex;
+local ic=1;
+cap gen `7'=.;
+gen `3'=.;
+gen `4'=.;
+while `ic' <= 100 {;
+*dis `ic';
+quietly {;
+local xx=`6'[`ic'];
+gen z=abs((`2'-`xx')/`5');
+gen kz=(15/16)*(1-z^2)^2 if z <= 1;
+reg `1' `2' [w=kz] if kz ~= .;
+replace `4'=_b[`2'] in `ic';
+replace `3'=_b[_cons]+_b[`2']*`xx' in `ic';
+replace `7'=_b[_cons]+_b[`2']*`2' if `2'<=`6'[`ic'] &
+`2'>`6'[`ic'-1];
+drop z kz;
+};
+local ic=`ic'+1;
+};
+end;
+
+
+global xmin=-4;
+global xmax=1.1;
+global st=($xmax-$xmin)/99;
+global h=0.5;
+gen xgrid=$xmin+(_n-1)*$st in 1/100;
+
+
+   lowrex  lnyield lnarea smth dsmth  $h xgrid plnyield;
+
+   la var xgrid "ln(area)";
+   la var smth "expected yield";
+   twoway connected smth xgrid, s(i);
+more;
+*now question 6, the partial linear model.  First need to generate residuals from
+*nonparametric regressions of all the variables on ln(area);
+
+
+*start by getting rid of too-small cells of vill*crop*year;
+   drop plnyield;
+   sort vcyrfe;
+   by vcyrfe: egen count = count(vcyrfe);
+   drop if count<10;
+   drop count;
+   tab vcyrfe, gen(dum);
+
+*reset the grid, given the fact that we have dropped some of the observations;
+
+global xmin=-3.8;
+global xmax=1.1;
+global st=($xmax-$xmin)/99;
+global h=0.5;
+replace xgrid=$xmin+(_n-1)*$st in 1/100;
+
+
+*now estiamte the residuals of each variable from e(var|land area);
+
+   qui for var lnyield topo* soil* loc* dum* lntarea:
+      lowrex X lnarea smX dsmX $h xgrid pX \
+      gen resX = X - pX;
+
+*estimate the betas from these residuals;
+   reg res* ;
+
+*note, an even stronger effect of area on other plots on yields;
+
+*now estimate the nonlinear part of the partial linear model by subtracting off the
+*estimated beta * expected value of m ;
+
+   for var topo* soil* loc* dum* lntarea:
+      replace smlnyield = smlnyield - _b[resX]*smX;
+   la var smlnyield "expected yield";
+* graph the estimated function;
+   twoway connected  smlnyield xgrid, s(i) ;

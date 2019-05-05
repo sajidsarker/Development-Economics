@@ -1,0 +1,394 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\Dell\Documents\Graduate - Economics\Development Economics\PS1_SMSajidAlSanai.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}23 Apr 2019, 14:28:00
+
+{com}. do "C:\Users\Dell\AppData\Local\Temp\STD01000000.tmp"
+{txt}
+{com}. * Development Economics: Problem Set 1
+. * S M Sajid Al Sanai
+. 
+. * Import dataset
+. use burkina731.dta, clear
+{txt}
+{com}. 
+. * Identifier variables do not use {c -(}0{c )-} as indexing value
+. //tab village //v       [1-6]
+. //tab hhn     //h       [1-32]
+. //tab year    //t       [1-3]
+. //tab fcrop   //c       [1-44]  discont.
+. //tab plotnum //i       [1-999] discont.
+. 
+. * Generate fixed effects
+. ** Fixed effects are 
+. gen fe_vtc  = (village * 1000) + (fcrop * 10) + year
+{txt}
+{com}. label var fe_vtc "vtc Fixed Effects"
+{txt}
+{com}. gen fe_vhtc = (fe_vtc  * 100)  + hhn
+{txt}
+{com}. label var fe_vhtc "vhtc Fixed Effects"
+{txt}
+{com}. 
+. * Dependent variable is log of yield (vhtci)
+. ** {c -(}yield = tot_value / tot_area{c )-}
+. ** => ln_yield = ln( tot_value / tot_area )
+. ** => ln_yield = ln( tot_value ) - ln( tot_area )
+. rename lnvalue ln_value
+{res}{txt}
+{com}. rename lnarea  ln_area
+{res}{txt}
+{com}. gen ln_yield = ln_value - ln_area
+{txt}
+{com}. 
+. * Fixed Effects Regression
+. ** {c -(}xtreg, fe i(.){c )-}                             Command format
+. ** {c -(}topo* soil* loc* ln_area{c )-}   Covariates matrix
+. ** {c -(}totarea lntarea lnhhsize{c )-}   Exclude
+. xtreg ln_yield topo* soil* loc* ln_area, fe i(fe_vtc)
+{txt}warning: existing panel variable is not fe_vtc
+
+Fixed-effects (within) regression               Number of obs      = {res}     2576
+{txt}Group variable: {res}fe_vtc                          {txt}Number of groups   = {res}      162
+
+{txt}R-sq:  within  = {res}0.0422                         {txt}Obs per group: min = {res}        1
+{txt}       between = {res}0.1326                                        {txt}avg = {res}     15.9
+{txt}       overall = {res}0.1224                                        {txt}max = {res}       56
+
+                                                {txt}F({res}24{txt},{res}2390{txt})         = {res}     4.38
+{txt}corr(u_i, Xb)  = {res}0.1829                         {txt}Prob > F           =    {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    ln_yield{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}topo1 {c |}{col 14}{res}{space 2}-.4173048{col 26}{space 2} .1552245{col 37}{space 1}   -2.69{col 46}{space 3}0.007{col 54}{space 4}-.7216934{col 67}{space 3}-.1129162
+{txt}{space 7}topo2 {c |}{col 14}{res}{space 2}-.2770841{col 26}{space 2} .1379051{col 37}{space 1}   -2.01{col 46}{space 3}0.045{col 54}{space 4}  -.54751{col 67}{space 3}-.0066581
+{txt}{space 7}topo3 {c |}{col 14}{res}{space 2}-.2596383{col 26}{space 2} .1350329{col 37}{space 1}   -1.92{col 46}{space 3}0.055{col 54}{space 4}-.5244321{col 67}{space 3} .0051555
+{txt}{space 7}topo4 {c |}{col 14}{res}{space 2}-.2068287{col 26}{space 2} .1326425{col 37}{space 1}   -1.56{col 46}{space 3}0.119{col 54}{space 4} -.466935{col 67}{space 3} .0532775
+{txt}{space 7}soil7 {c |}{col 14}{res}{space 2}-.1693681{col 26}{space 2} .1374232{col 37}{space 1}   -1.23{col 46}{space 3}0.218{col 54}{space 4} -.438849{col 67}{space 3} .1001129
+{txt}{space 6}soil21 {c |}{col 14}{res}{space 2} .2189651{col 26}{space 2} .1928816{col 37}{space 1}    1.14{col 46}{space 3}0.256{col 54}{space 4}-.1592675{col 67}{space 3} .5971976
+{txt}{space 6}soil31 {c |}{col 14}{res}{space 2} .0639357{col 26}{space 2} .1454792{col 37}{space 1}    0.44{col 46}{space 3}0.660{col 54}{space 4}-.2213427{col 67}{space 3} .3492141
+{txt}{space 6}soil32 {c |}{col 14}{res}{space 2}-.0029926{col 26}{space 2} .1493357{col 37}{space 1}   -0.02{col 46}{space 3}0.984{col 54}{space 4}-.2958336{col 67}{space 3} .2898484
+{txt}{space 6}soil33 {c |}{col 14}{res}{space 2} .2108274{col 26}{space 2} .1877727{col 37}{space 1}    1.12{col 46}{space 3}0.262{col 54}{space 4}-.1573867{col 67}{space 3} .5790415
+{txt}{space 6}soil37 {c |}{col 14}{res}{space 2} .1287846{col 26}{space 2} .1982255{col 37}{space 1}    0.65{col 46}{space 3}0.516{col 54}{space 4} -.259927{col 67}{space 3} .5174963
+{txt}{space 6}soil35 {c |}{col 14}{res}{space 2} .1403218{col 26}{space 2} .2155674{col 37}{space 1}    0.65{col 46}{space 3}0.515{col 54}{space 4}-.2823967{col 67}{space 3} .5630402
+{txt}{space 6}soil45 {c |}{col 14}{res}{space 2} .0298251{col 26}{space 2} .1640325{col 37}{space 1}    0.18{col 46}{space 3}0.856{col 54}{space 4}-.2918356{col 67}{space 3} .3514858
+{txt}{space 6}soil51 {c |}{col 14}{res}{space 2} .1275817{col 26}{space 2} .0972852{col 37}{space 1}    1.31{col 46}{space 3}0.190{col 54}{space 4}-.0631904{col 67}{space 3} .3183539
+{txt}{space 7}soil1 {c |}{col 14}{res}{space 2} .1579305{col 26}{space 2} .4604687{col 37}{space 1}    0.34{col 46}{space 3}0.732{col 54}{space 4}-.7450289{col 67}{space 3}  1.06089
+{txt}{space 7}soil3 {c |}{col 14}{res}{space 2}-.1055179{col 26}{space 2} .1332205{col 37}{space 1}   -0.79{col 46}{space 3}0.428{col 54}{space 4}-.3667576{col 67}{space 3} .1557217
+{txt}{space 6}soil11 {c |}{col 14}{res}{space 2}-.3610024{col 26}{space 2} .2326668{col 37}{space 1}   -1.55{col 46}{space 3}0.121{col 54}{space 4}-.8172519{col 67}{space 3} .0952472
+{txt}{space 6}soil12 {c |}{col 14}{res}{space 2}-.0667989{col 26}{space 2} .2188587{col 37}{space 1}   -0.31{col 46}{space 3}0.760{col 54}{space 4}-.4959714{col 67}{space 3} .3623735
+{txt}{space 6}soil13 {c |}{col 14}{res}{space 2} .1708714{col 26}{space 2} .2667383{col 37}{space 1}    0.64{col 46}{space 3}0.522{col 54}{space 4}-.3521909{col 67}{space 3} .6939337
+{txt}{space 6}soil34 {c |}{col 14}{res}{space 2}-.1531976{col 26}{space 2} .2647133{col 37}{space 1}   -0.58{col 46}{space 3}0.563{col 54}{space 4}-.6722891{col 67}{space 3} .3658938
+{txt}{space 6}soil46 {c |}{col 14}{res}{space 2} -.418554{col 26}{space 2} .2377307{col 37}{space 1}   -1.76{col 46}{space 3}0.078{col 54}{space 4}-.8847337{col 67}{space 3} .0476257
+{txt}{space 6}soil53 {c |}{col 14}{res}{space 2} .3928609{col 26}{space 2} .2157001{col 37}{space 1}    1.82{col 46}{space 3}0.069{col 54}{space 4}-.0301177{col 67}{space 3} .8158396
+{txt}{space 8}loc1 {c |}{col 14}{res}{space 2} .2106108{col 26}{space 2} .0753538{col 37}{space 1}    2.79{col 46}{space 3}0.005{col 54}{space 4} .0628452{col 67}{space 3} .3583763
+{txt}{space 8}loc2 {c |}{col 14}{res}{space 2}  .118715{col 26}{space 2} .0584738{col 37}{space 1}    2.03{col 46}{space 3}0.042{col 54}{space 4} .0040504{col 67}{space 3} .2333796
+{txt}{space 5}ln_area {c |}{col 14}{res}{space 2}-.1610271{col 26}{space 2} .0247182{col 37}{space 1}   -6.51{col 46}{space 3}0.000{col 54}{space 4}-.2094984{col 67}{space 3}-.1125558
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3.415241{col 26}{space 2} .1392904{col 37}{space 1}   24.52{col 46}{space 3}0.000{col 54}{space 4} 3.142099{col 67}{space 3} 3.688384
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} 1.1032508
+     {txt}sigma_e {c |} {res}  1.091883
+         {txt}rho {c |} {res} .50517851{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0:     F({res}161{txt}, {res}2390{txt}) = {res}    7.46           {txt}Prob > F = {res}0.0000
+{txt}
+{com}. predict residuals_v, e
+{txt}
+{com}. label var residuals_v "v Residuals"
+{txt}
+{com}. 
+. xtreg ln_yield topo* soil* loc* ln_area, fe i(fe_vhtc)
+{txt}warning: existing panel variable is not fe_vhtc
+
+Fixed-effects (within) regression               Number of obs      = {res}     2576
+{txt}Group variable: {res}fe_vhtc                         {txt}Number of groups   = {res}     1846
+
+{txt}R-sq:  within  = {res}0.0761                         {txt}Obs per group: min = {res}        1
+{txt}       between = {res}0.0529                                        {txt}avg = {res}      1.4
+{txt}       overall = {res}0.0584                                        {txt}max = {res}        6
+
+                                                {txt}F({res}24{txt},{res}706{txt})          = {res}     2.42
+{txt}corr(u_i, Xb)  = {res}-0.0659                        {txt}Prob > F           =    {res}0.0002
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    ln_yield{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}topo1 {c |}{col 14}{res}{space 2}-.4709716{col 26}{space 2}  .267833{col 37}{space 1}   -1.76{col 46}{space 3}0.079{col 54}{space 4}-.9968161{col 67}{space 3}  .054873
+{txt}{space 7}topo2 {c |}{col 14}{res}{space 2} -.146441{col 26}{space 2} .2340169{col 37}{space 1}   -0.63{col 46}{space 3}0.532{col 54}{space 4}-.6058934{col 67}{space 3} .3130113
+{txt}{space 7}topo3 {c |}{col 14}{res}{space 2}-.1741458{col 26}{space 2} .2262705{col 37}{space 1}   -0.77{col 46}{space 3}0.442{col 54}{space 4}-.6183895{col 67}{space 3} .2700979
+{txt}{space 7}topo4 {c |}{col 14}{res}{space 2}-.1131443{col 26}{space 2} .2229497{col 37}{space 1}   -0.51{col 46}{space 3}0.612{col 54}{space 4}-.5508682{col 67}{space 3} .3245796
+{txt}{space 7}soil7 {c |}{col 14}{res}{space 2}-.2937165{col 26}{space 2} .2778046{col 37}{space 1}   -1.06{col 46}{space 3}0.291{col 54}{space 4}-.8391386{col 67}{space 3} .2517057
+{txt}{space 6}soil21 {c |}{col 14}{res}{space 2} .2639428{col 26}{space 2} .3082066{col 37}{space 1}    0.86{col 46}{space 3}0.392{col 54}{space 4}-.3411685{col 67}{space 3} .8690541
+{txt}{space 6}soil31 {c |}{col 14}{res}{space 2}-.3307579{col 26}{space 2} .2284215{col 37}{space 1}   -1.45{col 46}{space 3}0.148{col 54}{space 4}-.7792246{col 67}{space 3} .1177089
+{txt}{space 6}soil32 {c |}{col 14}{res}{space 2}-.3485796{col 26}{space 2} .2463119{col 37}{space 1}   -1.42{col 46}{space 3}0.157{col 54}{space 4}-.8321712{col 67}{space 3}  .135012
+{txt}{space 6}soil33 {c |}{col 14}{res}{space 2}-.1971536{col 26}{space 2} .3566942{col 37}{space 1}   -0.55{col 46}{space 3}0.581{col 54}{space 4}-.8974619{col 67}{space 3} .5031547
+{txt}{space 6}soil37 {c |}{col 14}{res}{space 2} .0668419{col 26}{space 2} .3283176{col 37}{space 1}    0.20{col 46}{space 3}0.839{col 54}{space 4}-.5777538{col 67}{space 3} .7114377
+{txt}{space 6}soil35 {c |}{col 14}{res}{space 2}-.1496067{col 26}{space 2} .4514536{col 37}{space 1}   -0.33{col 46}{space 3}0.740{col 54}{space 4}-1.035959{col 67}{space 3} .7367456
+{txt}{space 6}soil45 {c |}{col 14}{res}{space 2}-.1476147{col 26}{space 2} .2500988{col 37}{space 1}   -0.59{col 46}{space 3}0.555{col 54}{space 4}-.6386411{col 67}{space 3} .3434117
+{txt}{space 6}soil51 {c |}{col 14}{res}{space 2} .1632733{col 26}{space 2} .2259021{col 37}{space 1}    0.72{col 46}{space 3}0.470{col 54}{space 4}-.2802471{col 67}{space 3} .6067937
+{txt}{space 7}soil1 {c |}{col 14}{res}{space 2} 1.022489{col 26}{space 2} .7351434{col 37}{space 1}    1.39{col 46}{space 3}0.165{col 54}{space 4}-.4208398{col 67}{space 3} 2.465818
+{txt}{space 7}soil3 {c |}{col 14}{res}{space 2} .2367755{col 26}{space 2} .2669585{col 37}{space 1}    0.89{col 46}{space 3}0.375{col 54}{space 4} -.287352{col 67}{space 3}  .760903
+{txt}{space 6}soil11 {c |}{col 14}{res}{space 2}-.6923676{col 26}{space 2} .4213079{col 37}{space 1}   -1.64{col 46}{space 3}0.101{col 54}{space 4}-1.519534{col 67}{space 3} .1347988
+{txt}{space 6}soil12 {c |}{col 14}{res}{space 2}  .424006{col 26}{space 2}    .3692{col 37}{space 1}    1.15{col 46}{space 3}0.251{col 54}{space 4}-.3008553{col 67}{space 3} 1.148867
+{txt}{space 6}soil13 {c |}{col 14}{res}{space 2} 1.082068{col 26}{space 2} .6215119{col 37}{space 1}    1.74{col 46}{space 3}0.082{col 54}{space 4}-.1381647{col 67}{space 3} 2.302301
+{txt}{space 6}soil34 {c |}{col 14}{res}{space 2}-.5078006{col 26}{space 2} .4040409{col 37}{space 1}   -1.26{col 46}{space 3}0.209{col 54}{space 4}-1.301066{col 67}{space 3} .2854649
+{txt}{space 6}soil46 {c |}{col 14}{res}{space 2}-.8469797{col 26}{space 2} .3576017{col 37}{space 1}   -2.37{col 46}{space 3}0.018{col 54}{space 4} -1.54907{col 67}{space 3}-.1448896
+{txt}{space 6}soil53 {c |}{col 14}{res}{space 2} .3945319{col 26}{space 2} .4681921{col 37}{space 1}    0.84{col 46}{space 3}0.400{col 54}{space 4}-.5246835{col 67}{space 3} 1.313747
+{txt}{space 8}loc1 {c |}{col 14}{res}{space 2} .1868941{col 26}{space 2} .1147844{col 37}{space 1}    1.63{col 46}{space 3}0.104{col 54}{space 4}-.0384656{col 67}{space 3} .4122537
+{txt}{space 8}loc2 {c |}{col 14}{res}{space 2} .0960644{col 26}{space 2}    .0976{col 37}{space 1}    0.98{col 46}{space 3}0.325{col 54}{space 4}-.0955565{col 67}{space 3} .2876853
+{txt}{space 5}ln_area {c |}{col 14}{res}{space 2}-.1537155{col 26}{space 2} .0403257{col 37}{space 1}   -3.81{col 46}{space 3}0.000{col 54}{space 4}-.2328881{col 67}{space 3}-.0745428
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3.417972{col 26}{space 2}  .228832{col 37}{space 1}   14.94{col 46}{space 3}0.000{col 54}{space 4} 2.968699{col 67}{space 3} 3.867244
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} 1.3621766
+     {txt}sigma_e {c |} {res} .95713414
+         {txt}rho {c |} {res} .66947051{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0:     F({res}1845{txt}, {res}706{txt}) = {res}    2.15           {txt}Prob > F = {res}0.0000
+{txt}
+{com}. predict residuals_h, e
+{txt}
+{com}. label var residuals_h "h Residuals"
+{txt}
+{com}. 
+. * Estimation of Density
+. kdensity residuals_v, normal gen(est_pts_vtc density_vtc)
+{res}{txt}
+{com}. label var density_vtc "vtc Density"
+{txt}
+{com}. label var est_pts_vtc "vtc Pred. Dev."
+{txt}
+{com}. graph export graph1.png, replace
+{txt}(file graph1.png written in PNG format)
+
+{com}. 
+. kdensity residuals_h, at(est_pts_vtc) gen(est_pts_vhtc density_vhtc)
+{res}{txt}
+{com}. label var density_vhtc "vhtc Density"
+{txt}
+{com}. label var est_pts_vhtc "vhtc Pred. Dev."
+{txt}
+{com}. graph export graph2.png, replace
+{txt}(file graph2.png written in PNG format)
+
+{com}. 
+. graph twoway connected density_vtc density_vhtc est_pts_vtc, l("Kernel Density Estimate")
+{res}{txt}
+{com}. graph export graph3.png, replace
+{txt}(file graph3.png written in PNG format)
+
+{com}. 
+. * Modifying dataset structure and cleaning up
+. ** Append residuals for village level and household level regressions
+. ** into a single column by saving with one constructed index and then
+. ** importing from temporary dataset.
+. keep residuals_v residuals_h
+{txt}
+{com}. * Create the indexx
+. gen is_village = 1
+{txt}
+{com}. * Save temporary dataset
+. save temp_burkina73, replace
+{txt}file temp_burkina73.dta saved
+
+{com}. * Change the index
+. replace is_village = 0
+{txt}(2576 real changes made)
+
+{com}. * Append using old index
+. append using temp_burkina73
+{txt}
+{com}. * Verify
+. tab is_village
+
+ {txt}is_village {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}      2,576       50.00       50.00
+{txt}          1 {c |}{res}      2,576       50.00      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      5,152      100.00
+{txt}
+{com}. * Construct single variable residuals using index
+. gen residuals = .
+{txt}(5152 missing values generated)
+
+{com}. replace residuals = residuals_v if is_village == 1
+{txt}(2576 real changes made)
+
+{com}. replace residuals = residuals_h if is_village == 0
+{txt}(2576 real changes made)
+
+{com}. keep residuals is_village
+{txt}
+{com}. * Save temporary dataset
+. save temp_burkina73, replace
+{txt}file temp_burkina73.dta saved
+
+{com}. 
+. * Testing for equality of distribution
+. ksmirnov residuals, by(is_village)
+
+{txt}Two-sample Kolmogorov-Smirnov test for equality of distribution functions
+
+ Smaller group       D       P-value  Corrected
+ {hline 46}
+ 0:                {res}  0.3090    0.000
+{txt} 1:                {res} -0.1836    0.000
+{txt} Combined K-S:     {res}  0.3090    0.000      0.000
+
+{txt}Note: ties exist in combined dataset;
+      there are 3847 unique values out of 5152 observations.
+
+{com}. 
+. * Reuse dataset prior to temporary modifications
+. use burkina731.dta, clear
+{txt}
+{com}. 
+. * Generate fixed effects
+. ** Fixed effects are 
+. gen fe_vtc  = (village * 1000) + (fcrop * 10) + year
+{txt}
+{com}. label var fe_vtc "vtc Fixed Effects"
+{txt}
+{com}. gen fe_vhtc = (fe_vtc  * 100)  + hhn
+{txt}
+{com}. label var fe_vhtc "vhtc Fixed Effects"
+{txt}
+{com}. 
+. * Dependent variable is log of yield (vhtci)
+. ** {c -(}yield = tot_value / tot_area{c )-}
+. ** => ln_yield = ln( tot_value / tot_area )
+. ** => ln_yield = ln( tot_value ) - ln( tot_area )
+. rename lnvalue ln_value
+{res}{txt}
+{com}. rename lnarea  ln_area
+{res}{txt}
+{com}. gen ln_yield = ln_value - ln_area
+{txt}
+{com}. 
+. * Fixed Effects Regression w/ Additional Household Characteristics
+. ** {c -(}xtreg, fe i(.){c )-}                             Command format
+. ** {c -(}topo* soil* loc* ln_area{c )-}   Covariates matrix
+. ** {c -(}lntarea lnhhsize{c )-}                   Additional Characteristics
+. ** {c -(}totarea{c )-}                                    Exclude
+. xtreg ln_yield topo* soil* loc* ln_area lnhhsize, fe i(fe_vtc)
+{txt}warning: existing panel variable is not fe_vtc
+
+Fixed-effects (within) regression               Number of obs      = {res}     2270
+{txt}Group variable: {res}fe_vtc                          {txt}Number of groups   = {res}      152
+
+{txt}R-sq:  within  = {res}0.0560                         {txt}Obs per group: min = {res}        1
+{txt}       between = {res}0.1603                                        {txt}avg = {res}     14.9
+{txt}       overall = {res}0.1255                                        {txt}max = {res}       56
+
+                                                {txt}F({res}25{txt},{res}2093{txt})         = {res}     4.97
+{txt}corr(u_i, Xb)  = {res}0.1226                         {txt}Prob > F           =    {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    ln_yield{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}topo1 {c |}{col 14}{res}{space 2}-.4751642{col 26}{space 2} .1662653{col 37}{space 1}   -2.86{col 46}{space 3}0.004{col 54}{space 4}-.8012268{col 67}{space 3}-.1491017
+{txt}{space 7}topo2 {c |}{col 14}{res}{space 2}-.3160177{col 26}{space 2} .1499737{col 37}{space 1}   -2.11{col 46}{space 3}0.035{col 54}{space 4}-.6101309{col 67}{space 3}-.0219046
+{txt}{space 7}topo3 {c |}{col 14}{res}{space 2}-.2824825{col 26}{space 2} .1473026{col 37}{space 1}   -1.92{col 46}{space 3}0.055{col 54}{space 4}-.5713574{col 67}{space 3} .0063923
+{txt}{space 7}topo4 {c |}{col 14}{res}{space 2} -.233111{col 26}{space 2} .1454243{col 37}{space 1}   -1.60{col 46}{space 3}0.109{col 54}{space 4}-.5183023{col 67}{space 3} .0520804
+{txt}{space 7}soil7 {c |}{col 14}{res}{space 2}-.1850849{col 26}{space 2} .1385881{col 37}{space 1}   -1.34{col 46}{space 3}0.182{col 54}{space 4}-.4568698{col 67}{space 3} .0867001
+{txt}{space 6}soil21 {c |}{col 14}{res}{space 2} .3340159{col 26}{space 2} .2186946{col 37}{space 1}    1.53{col 46}{space 3}0.127{col 54}{space 4}-.0948657{col 67}{space 3} .7628976
+{txt}{space 6}soil31 {c |}{col 14}{res}{space 2} .0943839{col 26}{space 2} .1609004{col 37}{space 1}    0.59{col 46}{space 3}0.558{col 54}{space 4}-.2211576{col 67}{space 3} .4099254
+{txt}{space 6}soil32 {c |}{col 14}{res}{space 2}-.0207809{col 26}{space 2} .1633791{col 37}{space 1}   -0.13{col 46}{space 3}0.899{col 54}{space 4}-.3411832{col 67}{space 3} .2996215
+{txt}{space 6}soil33 {c |}{col 14}{res}{space 2} .1573599{col 26}{space 2} .2196855{col 37}{space 1}    0.72{col 46}{space 3}0.474{col 54}{space 4}-.2734649{col 67}{space 3} .5881847
+{txt}{space 6}soil37 {c |}{col 14}{res}{space 2} .1398084{col 26}{space 2} .2089537{col 37}{space 1}    0.67{col 46}{space 3}0.504{col 54}{space 4}-.2699703{col 67}{space 3}  .549587
+{txt}{space 6}soil35 {c |}{col 14}{res}{space 2} .0375211{col 26}{space 2} .2925741{col 37}{space 1}    0.13{col 46}{space 3}0.898{col 54}{space 4}-.5362453{col 67}{space 3} .6112876
+{txt}{space 6}soil45 {c |}{col 14}{res}{space 2} .0250932{col 26}{space 2} .1724409{col 37}{space 1}    0.15{col 46}{space 3}0.884{col 54}{space 4}-.3130803{col 67}{space 3} .3632667
+{txt}{space 6}soil51 {c |}{col 14}{res}{space 2} .1167337{col 26}{space 2} .0981021{col 37}{space 1}    1.19{col 46}{space 3}0.234{col 54}{space 4}-.0756541{col 67}{space 3} .3091215
+{txt}{space 7}soil1 {c |}{col 14}{res}{space 2} .1308078{col 26}{space 2} .4632604{col 37}{space 1}    0.28{col 46}{space 3}0.778{col 54}{space 4}-.7776913{col 67}{space 3} 1.039307
+{txt}{space 7}soil3 {c |}{col 14}{res}{space 2}-.1524365{col 26}{space 2} .1346335{col 37}{space 1}   -1.13{col 46}{space 3}0.258{col 54}{space 4} -.416466{col 67}{space 3} .1115929
+{txt}{space 6}soil11 {c |}{col 14}{res}{space 2} -.299804{col 26}{space 2} .2527981{col 37}{space 1}   -1.19{col 46}{space 3}0.236{col 54}{space 4}-.7955659{col 67}{space 3} .1959579
+{txt}{space 6}soil12 {c |}{col 14}{res}{space 2} .0087922{col 26}{space 2} .2391904{col 37}{space 1}    0.04{col 46}{space 3}0.971{col 54}{space 4}-.4602836{col 67}{space 3}  .477868
+{txt}{space 6}soil13 {c |}{col 14}{res}{space 2} .3263832{col 26}{space 2} .2939373{col 37}{space 1}    1.11{col 46}{space 3}0.267{col 54}{space 4}-.2500567{col 67}{space 3} .9028231
+{txt}{space 6}soil34 {c |}{col 14}{res}{space 2}-.3615046{col 26}{space 2}  .359567{col 37}{space 1}   -1.01{col 46}{space 3}0.315{col 54}{space 4}-1.066651{col 67}{space 3} .3436414
+{txt}{space 6}soil46 {c |}{col 14}{res}{space 2}-.3152511{col 26}{space 2} .2572601{col 37}{space 1}   -1.23{col 46}{space 3}0.221{col 54}{space 4}-.8197634{col 67}{space 3} .1892612
+{txt}{space 6}soil53 {c |}{col 14}{res}{space 2} .4009233{col 26}{space 2} .2169944{col 37}{space 1}    1.85{col 46}{space 3}0.065{col 54}{space 4}-.0246241{col 67}{space 3} .8264707
+{txt}{space 8}loc1 {c |}{col 14}{res}{space 2} .1923843{col 26}{space 2} .0837448{col 37}{space 1}    2.30{col 46}{space 3}0.022{col 54}{space 4} .0281525{col 67}{space 3} .3566162
+{txt}{space 8}loc2 {c |}{col 14}{res}{space 2} .1081072{col 26}{space 2} .0620538{col 37}{space 1}    1.74{col 46}{space 3}0.082{col 54}{space 4}-.0135864{col 67}{space 3} .2298008
+{txt}{space 5}ln_area {c |}{col 14}{res}{space 2}-.1983996{col 26}{space 2} .0275971{col 37}{space 1}   -7.19{col 46}{space 3}0.000{col 54}{space 4}-.2525202{col 67}{space 3}-.1442791
+{txt}{space 4}lnhhsize {c |}{col 14}{res}{space 2} .1744971{col 26}{space 2} .0403883{col 37}{space 1}    4.32{col 46}{space 3}0.000{col 54}{space 4} .0952917{col 67}{space 3} .2537026
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  2.95245{col 26}{space 2} .1827431{col 37}{space 1}   16.16{col 46}{space 3}0.000{col 54}{space 4} 2.594073{col 67}{space 3} 3.310827
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} 1.0934009
+     {txt}sigma_e {c |} {res} 1.0980639
+         {txt}rho {c |} {res} .49787224{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0:     F({res}151{txt}, {res}2093{txt}) = {res}    7.01           {txt}Prob > F = {res}0.0000
+{txt}
+{com}. predict residuals_v_hs, e
+{txt}(306 missing values generated)
+
+{com}. label var residuals_v_hs "v Residuals w/ Log of Household Size"
+{txt}
+{com}. 
+. xtreg ln_yield topo* soil* loc* ln_area lntarea, fe i(fe_vtc)
+
+{txt}Fixed-effects (within) regression               Number of obs      = {res}     2574
+{txt}Group variable: {res}fe_vtc                          {txt}Number of groups   = {res}      162
+
+{txt}R-sq:  within  = {res}0.0444                         {txt}Obs per group: min = {res}        1
+{txt}       between = {res}0.1359                                        {txt}avg = {res}     15.9
+{txt}       overall = {res}0.1199                                        {txt}max = {res}       56
+
+                                                {txt}F({res}25{txt},{res}2387{txt})         = {res}     4.44
+{txt}corr(u_i, Xb)  = {res}0.1571                         {txt}Prob > F           =    {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    ln_yield{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}topo1 {c |}{col 14}{res}{space 2} -.416895{col 26}{space 2} .1552245{col 37}{space 1}   -2.69{col 46}{space 3}0.007{col 54}{space 4}-.7212839{col 67}{space 3}-.1125062
+{txt}{space 7}topo2 {c |}{col 14}{res}{space 2}-.2820464{col 26}{space 2} .1378393{col 37}{space 1}   -2.05{col 46}{space 3}0.041{col 54}{space 4}-.5523434{col 67}{space 3}-.0117494
+{txt}{space 7}topo3 {c |}{col 14}{res}{space 2}-.2604823{col 26}{space 2} .1349537{col 37}{space 1}   -1.93{col 46}{space 3}0.054{col 54}{space 4}-.5251209{col 67}{space 3} .0041563
+{txt}{space 7}topo4 {c |}{col 14}{res}{space 2}-.2116314{col 26}{space 2} .1325778{col 37}{space 1}   -1.60{col 46}{space 3}0.111{col 54}{space 4}-.4716109{col 67}{space 3}  .048348
+{txt}{space 7}soil7 {c |}{col 14}{res}{space 2}-.1947183{col 26}{space 2} .1377819{col 37}{space 1}   -1.41{col 46}{space 3}0.158{col 54}{space 4}-.4649028{col 67}{space 3} .0754662
+{txt}{space 6}soil21 {c |}{col 14}{res}{space 2} .2387001{col 26}{space 2} .1929334{col 37}{space 1}    1.24{col 46}{space 3}0.216{col 54}{space 4}-.1396343{col 67}{space 3} .6170345
+{txt}{space 6}soil31 {c |}{col 14}{res}{space 2} .0778865{col 26}{space 2}  .145506{col 37}{space 1}    0.54{col 46}{space 3}0.593{col 54}{space 4}-.2074447{col 67}{space 3} .3632177
+{txt}{space 6}soil32 {c |}{col 14}{res}{space 2}-.0016825{col 26}{space 2} .1492457{col 37}{space 1}   -0.01{col 46}{space 3}0.991{col 54}{space 4}-.2943471{col 67}{space 3}  .290982
+{txt}{space 6}soil33 {c |}{col 14}{res}{space 2} .2170502{col 26}{space 2} .1876799{col 37}{space 1}    1.16{col 46}{space 3}0.248{col 54}{space 4}-.1509822{col 67}{space 3} .5850827
+{txt}{space 6}soil37 {c |}{col 14}{res}{space 2} .1431607{col 26}{space 2} .1981965{col 37}{space 1}    0.72{col 46}{space 3}0.470{col 54}{space 4}-.2454944{col 67}{space 3} .5318157
+{txt}{space 6}soil35 {c |}{col 14}{res}{space 2} .1129503{col 26}{space 2}  .215735{col 37}{space 1}    0.52{col 46}{space 3}0.601{col 54}{space 4} -.310097{col 67}{space 3} .5359977
+{txt}{space 6}soil45 {c |}{col 14}{res}{space 2}  .030253{col 26}{space 2} .1639322{col 37}{space 1}    0.18{col 46}{space 3}0.854{col 54}{space 4}-.2912112{col 67}{space 3} .3517172
+{txt}{space 6}soil51 {c |}{col 14}{res}{space 2} .1071003{col 26}{space 2} .0976226{col 37}{space 1}    1.10{col 46}{space 3}0.273{col 54}{space 4}-.0843335{col 67}{space 3} .2985341
+{txt}{space 7}soil1 {c |}{col 14}{res}{space 2} .1405978{col 26}{space 2}  .460244{col 37}{space 1}    0.31{col 46}{space 3}0.760{col 54}{space 4}-.7619214{col 67}{space 3} 1.043117
+{txt}{space 7}soil3 {c |}{col 14}{res}{space 2}-.1157721{col 26}{space 2} .1332917{col 37}{space 1}   -0.87{col 46}{space 3}0.385{col 54}{space 4}-.3771515{col 67}{space 3} .1456073
+{txt}{space 6}soil11 {c |}{col 14}{res}{space 2} -.338055{col 26}{space 2} .2327611{col 37}{space 1}   -1.45{col 46}{space 3}0.147{col 54}{space 4}-.7944899{col 67}{space 3} .1183799
+{txt}{space 6}soil12 {c |}{col 14}{res}{space 2}-.0647688{col 26}{space 2} .2187546{col 37}{space 1}   -0.30{col 46}{space 3}0.767{col 54}{space 4}-.4937374{col 67}{space 3} .3641999
+{txt}{space 6}soil13 {c |}{col 14}{res}{space 2} .1637517{col 26}{space 2} .2665937{col 37}{space 1}    0.61{col 46}{space 3}0.539{col 54}{space 4}-.3590274{col 67}{space 3} .6865307
+{txt}{space 6}soil34 {c |}{col 14}{res}{space 2}-.1508433{col 26}{space 2} .2645525{col 37}{space 1}   -0.57{col 46}{space 3}0.569{col 54}{space 4}-.6696197{col 67}{space 3} .3679331
+{txt}{space 6}soil46 {c |}{col 14}{res}{space 2}-.4207864{col 26}{space 2} .2375957{col 37}{space 1}   -1.77{col 46}{space 3}0.077{col 54}{space 4}-.8867016{col 67}{space 3} .0451288
+{txt}{space 6}soil53 {c |}{col 14}{res}{space 2} .3912891{col 26}{space 2} .2155743{col 37}{space 1}    1.82{col 46}{space 3}0.070{col 54}{space 4}-.0314432{col 67}{space 3} .8140213
+{txt}{space 8}loc1 {c |}{col 14}{res}{space 2} .2016891{col 26}{space 2} .0755108{col 37}{space 1}    2.67{col 46}{space 3}0.008{col 54}{space 4} .0536156{col 67}{space 3} .3497627
+{txt}{space 8}loc2 {c |}{col 14}{res}{space 2}  .108903{col 26}{space 2} .0585879{col 37}{space 1}    1.86{col 46}{space 3}0.063{col 54}{space 4}-.0059853{col 67}{space 3} .2237913
+{txt}{space 5}ln_area {c |}{col 14}{res}{space 2}-.1661606{col 26}{space 2} .0248036{col 37}{space 1}   -6.70{col 46}{space 3}0.000{col 54}{space 4}-.2147993{col 67}{space 3}-.1175219
+{txt}{space 5}lntarea {c |}{col 14}{res}{space 2} .0654094{col 26}{space 2} .0273768{col 37}{space 1}    2.39{col 46}{space 3}0.017{col 54}{space 4} .0117246{col 67}{space 3} .1190942
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3.341878{col 26}{space 2} .1426763{col 37}{space 1}   23.42{col 46}{space 3}0.000{col 54}{space 4} 3.062096{col 67}{space 3} 3.621661
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} 1.1002254
+     {txt}sigma_e {c |} {res} 1.0912119
+         {txt}rho {c |} {res} .50411295{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0:     F({res}161{txt}, {res}2387{txt}) = {res}    7.46           {txt}Prob > F = {res}0.0000
+{txt}
+{com}. predict residuals_v_hta, e
+{txt}(2 missing values generated)
+
+{com}. label var residuals_v_hta "v Residuals w/ Log of Total Area Cultivated by Household Head"
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\Dell\Documents\Graduate - Economics\Development Economics\PS1_SMSajidAlSanai.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}23 Apr 2019, 14:28:27
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
