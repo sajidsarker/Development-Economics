@@ -1,0 +1,198 @@
+
+(plotinp.dta) Non-labour inputs
+                      DDT |          7        0.23       98.27
+                   bamboo |          4        0.13       98.40
+                  calefon |          1        0.03       98.44
+                  cropmax |          5        0.17       98.60
+                     d.k. |          2        0.07       98.67
+              diamethoate |          5        0.17       98.84
+                    ethel |          9        0.30       99.14
+          felling machine |          1        0.03       99.17
+               fertilizer |          4        0.13       99.30
+                  gasapal |          5        0.17       99.47
+          kalifan (litre) |          1        0.03       99.50
+                    nails |          1        0.03       99.53
+                   poison |          1        0.03       99.57
+                  samphhi |          1        0.03       99.60
+               sticks (5) |          5        0.17       99.77
+                     teak |          1        0.03       99.80
+                   topsin |          1        0.03       99.83
+                    water |          5        0.17      100.00
+
+Relationship:
+1 Self
+2 Spouse
+3 Son
+4 Daughter
+5 Father
+6 Mother
+7 Grandson
+8 Granddaughter
+9 Grandfather
+10 Grandmother
+11 Brother
+12 Sister
+13 WBfa
+14 Uncle
+15 Aunt
+16 Co-wife
+17 Cousin
+18 Local Friend
+19 Non-resident friend
+20 Extension Agent
+21 Market
+22 Cooperative
+23 NGO
+24 Exporter
+25 Village head
+26 Lineage head
+27 Priest
+28 Trader
+
+---------------------
+
+Non-Labor Inputs:
+Insecticides/Pesticides
+1 Karate
+2 Acellic
+3 Dusban
+4 Cymbush
+5 Cymethoate
+6 Sumithion
+7 Furadan
+8 Diazinon
+
+Biological Control
+11 Biobit
+12 Dipel 2x
+13 Of-nak
+
+Herbicides
+21 Atrazine
+22 Hyvar X
+23 Diuron
+24 Gramoxone
+25 Fusilade Super
+26 Roundup
+27 Basta
+
+Fungicides
+31 Cocide
+32 Champion
+33 Topsin M
+34 Bavistin
+35 Alielte
+
+Fertilizer
+41 NPK 15-15-15
+42 NPK 23-15-5
+43 NPKMg 11-5-27-5
+44 Ammonia
+45 Urea
+46 Lobi 44 (Urea)
+47 Grofol (NPK)
+48 K Fol (Potash)
+49 Wuxal
+
+Others
+51 Carbide (for
+    forcing Pineapple)
+52 Biozyome TF
+     (flowering)
+53 Almephon
+     (degreening)
+
+80 Sprayer
+81 Tractor plowing
+
+
+(landc.dta) Soil description
+                          abu siabu |          1        0.08        0.08
+                            afo nwa |          1        0.08        0.16
+                          akrampasu |          1        0.08        0.24
+                          akranpasu |          1        0.08        0.32
+                           ama sika |          1        0.08        0.39
+                              ameti |         89        7.03        7.42
+                     ameti and sand |          1        0.08        7.50
+                   ameti with rocks |          1        0.08        7.58
+                              anwea |          1        0.08        7.66
+                        asase kokoo |          1        0.08        7.74
+                         askrampasu |          1        0.08        7.82
+                             atwepi |          3        0.24        8.06
+                         atwepi abo |          1        0.08        8.14
+                             atwipi |          2        0.16        8.29
+                            bipuosu |          1        0.08        8.37
+          black and red soil (clay) |          1        0.08        8.45
+                    black and sandy |          1        0.08        8.53
+               black and sandy soil |          1        0.08        8.61
+                   black loose soil |          1        0.08        8.69
+                         black sand |         18        1.42       10.11
+                         black soil |         88        6.95       17.06
+                black soil and clay |          1        0.08       17.14
+            black soil and red soil |          1        0.08       17.22
+             black soil wilt stones |          1        0.08       17.30
+                         blank soil |          1        0.08       17.38
+                         blind soil |          3        0.24       17.61
+                               clay |        108        8.53       26.15
+                    clay (red soil) |          1        0.08       26.22
+                clay and black soil |          1        0.08       26.30
+                   clay and gravels |          1        0.08       26.38
+                     clay and rocky |          1        0.08       26.46
+                      clay and sand |          9        0.71       27.17
+                     clay and sandy |          2        0.16       27.33
+                         clay rocks |          1        0.08       27.41
+                          clay sand |          1        0.08       27.49
+                            gravels |          4        0.32       27.80
+                   gravels (mbosia) |          1        0.08       27.88
+                          hard clay |          1        0.08       27.96
+                         hard sandy |          1        0.08       28.04
+                          hard soil |          1        0.08       28.12
+                      loam and clay |          1        0.08       28.20
+                              loamy |        101        7.98       36.18
+                              lomay |          1        0.08       36.26
+                   loose black soil |          1        0.08       36.33
+                             marshy |          5        0.39       36.73
+                marshy (black soil) |          1        0.08       36.81
+                           mbe sika |         11        0.87       37.68
+         mbe sika with small stones |          1        0.08       37.76
+                    mbe sika, sandy |          1        0.08       37.84
+                           nbe sika |          2        0.16       37.99
+                             nbusia |          1        0.08       38.07
+                      nbusia, rocky |          1        0.08       38.15
+           nso nwea (clay and sand) |          1        0.08       38.23
+                      otanim (clay) |          1        0.08       38.31
+                              otari |          1        0.08       38.39
+                             oworam |          1        0.08       38.47
+                           pongpong |          1        0.08       38.55
+                 red and black soil |          2        0.16       38.70
+                           red soil |          9        0.71       39.42
+                        refuse dump |          1        0.08       39.49
+                              rocky |          9        0.71       40.21
+                 rocky (black soil) |          1        0.08       40.28
+                    rocky and sandy |          1        0.08       40.36
+                     rocky red soil |          1        0.08       40.44
+                       rocky, sandy |          1        0.08       40.52
+                     sand (nfutuma) |          1        0.08       40.60
+                      sand and clay |          5        0.39       41.00
+                   sand and gravels |          1        0.08       41.07
+                     sand and rocky |          1        0.08       41.15
+                              sandy |        702       55.45       96.60
+                       sandy (clay) |          1        0.08       96.68
+                    sandy (nbesika) |          1        0.08       96.76
+               sandy and black soil |          1        0.08       96.84
+                     sandy and clay |          5        0.39       97.24
+                  sandy and gravels |          2        0.16       97.39
+                    sandy and rocky |          3        0.24       97.63
+               sandy and very stony |          1        0.08       97.71
+                sandy and water log |          3        0.24       97.95
+                        sandy black |          2        0.16       98.10
+                   sandy black soil |          1        0.08       98.18
+                         sandy clay |          5        0.39       98.58
+                        sandy rocks |          1        0.08       98.66
+                         sandy soil |          7        0.55       99.21
+                    sandy, mbe sika |          1        0.08       99.29
+                          siw asase |          1        0.08       99.37
+                              stony |          1        0.08       99.45
+                          water log |          1        0.08       99.53
+                         white sand |          5        0.39       99.92
+                 white soil (sandy) |          1        0.08      100.00

@@ -1,3 +1,6 @@
+* Development Economics: Problem Set 2
+* S M Sajid Al Sanai
+
 use soildata.dta
 * drop if yearfrom != "both"
 gen year = .
@@ -5,19 +8,19 @@ replace year = 2
 save temp_soildata.dta
 replace year = 1
 append temp_soildata.dta
-gen soil1 = .
-gen soil2 = .
-gen soil3 = .
-replace soil1 = ph97 if year == 1
-replace soil1 = ph98 if year == 2
-replace soil2 = oc97 if year == 1
-replace soil2 = oc98 if year == 2
-replace soil3 = om97 if year == 1
-replace soil3 = om98 if year == 2
-keep village hhn id soil* number plot year
+gen ph = .
+gen oc = .
+gen om = .
+replace ph = ph97 if year == 1
+replace ph = ph98 if year == 2
+replace oc = oc97 if year == 1
+replace oc = oc98 if year == 2
+replace om = om97 if year == 1
+replace om = om98 if year == 2
+keep village hhn id ph oc om number plot year
 * v h c t i
 * What is number and plot?
-save temp_soildata.dta
+save temp_soildata.dta, replace
 clear
 
 *'''    SOILDATA.DTA
@@ -35,17 +38,17 @@ clear
 *yearfrom        str5    %9s   
 *'''
 
+* Avoid use
 use sales.dta
 gen year = year(date)
 replace year = 1 if year == 1997
 replace year = 2 if year == 1998
 keep village hhn id round crop date unit quantity value plot year
 *bysort village hhn id plot crop round: egen gross_quantity = total(quantity)
-bysort village hhn plot crop round: egen gross_quantity = total(quantity)
-gen log_sales = log(gross_sales)
-gen log_quantity = log(gross_quantity)
-gen log_yield = log_sales - log_quantity
-save temp_sales.dta
+bysort village hhn plot crop round: egen gross_value = total(value)
+gen log_value = log(gross_value)
+*gen log_yield = log_sales - log_quantity
+save temp_sales.dta, replace
 clear
 
 *'''    SALES.DTA
@@ -90,9 +93,11 @@ clear
 *'''
 
 use landc.dta
-keep village hhn respondent_number plot_number date toposequence area
-
-save temp_landc.dta
+keep village hhn respondent_number plot_number date toposequence soil* area
+rename respondent_number id
+rename plot_number plot
+rename soil_description soil
+save temp_landc.dta, replace
 clear
 
 *'''    LANDC.DTA
@@ -147,11 +152,151 @@ clear
 *register_dec    str20   %20s                  who can register the land
 *'''
 
+use cropc.dta
+save temp_cropc.dta, replace
+clear
+
+*'''    CROPC.DTA
+*village         byte    %8.0g                 village of respondent
+*hhn             int     %8.0g                 household number of respondent
+*respondent_nu~r byte    %8.0g                 id number of respondent within
+*                                                household
+*plot_number     byte    %8.0g                 number of plot
+*crop            str10   %10s                  crop currently being grown on
+*                                                plot
+*date_planted_~_ str28   %28s                  date crop was planted
+*proportion_of~t str14   %14s                  proportion of plot used for this
+*                                                crop
+*notes           str37   %37s                  notes about the crops
+*date            long    %dD/N/Y               date of interview
+*'''
+
+*'''    PLOTACT.DTA
+*village         byte    %8.0g                 
+*hhn             int     %8.0g                 
+*id              float   %9.0g                 
+*plot            float   %9.0g                 
+*round           float   %9.0g                 when survey was done
+*plot_descript~n str80   %80s                  
+*activity1       str15   %15s                  type of plot activity
+*activity2       str15   %15s                  type of plot activity if there is
+*                                                more than one
+*activity3       str15   %15s                  type of plot activity if there is
+*                                                more than two
+*crop1           str10   %10s                  type of crop
+*crop2           str9    %9s                   type of crop if there is more
+*                                                than one
+*crop3           str10   %10s                  type of crop if there is more
+*                                                than two
+*crop4           str14   %14s                  type of crop if there is more
+*                                                than three
+*payment         str25   %25s                  whether there is payments on
+*                                                account of this land
+*payment_value   double  %12.0g                value of payments in Ghana
+*                                                current cds
+*payment_to      str17   %17s                  payment to whom
+*form            float   %9.0g                 
+*activity4       str1    %1s                   type of plot activity if there is
+*                                                more than three
+*r_s_notes       str80   %80s                  notes from survery
+*repround        float   %9.0g                 actual round of activity when
+*                                                this is not as same as round
+*'''
+
+*'''    PLOTHARV.DTA
+*village         byte    %8.0g                 
+*hhn             float   %9.0g                 
+*id              float   %8.0g                 
+*plot            float   %9.0g                 
+*crop            str25   %25s                  type of crop
+*unit            str15   %15s                  units of crop harvested
+*quantity        double  %9.0g                 quantity of crop harvested
+*value           double  %12.0g                total value of crop in Ghana
+*                                                current cds
+*to_owner        str19   %19s                  how much of harvest did they give
+*                                                to owner of land
+*round           float   %9.0g                 when survey was done
+*form            float   %8.0g                 
+*what_happened~_ str25   %25s                  describe what they did with
+*                                                harvest in code
+*plot_descript~n str80   %80s                  
+*r_s_notes       str80   %80s                  notes from survery
+*repround        float   %9.0g                 actual round of activity when
+*                                                this is not as same as round
+*'''
+
+use plotinp.dta
+gen fertiliser = .
+replace fertiliser = 0 if input != .
+replace fertiliser = 1 if input == "fertilizer" | (input >= 41 and input <= 49)
+keep village hhn id plot unit quantity
+
+*'''    PLOTINP.DTA
+*village         byte    %8.0g                 
+*hhn             float   %8.0g                 
+*id              float   %8.0g                 
+*plot            float   %9.0g                 
+*input           str25   %25s                  type of non-labour inputs
+*unit            str15   %15s                  units of non-labour inputs
+*quantity        double  %9.0g                 quantity of non-labour inputs
+*value           double  %12.0g                total value of non-labour inputs
+*                                                in Ghana current cds
+*source          str19   %19s                  sources of non-labour inputs
+*how             str20   %20s                  how was it obtained
+*round           float   %9.0g                 when survey was done
+*form            float   %8.0g                 
+*plot_descript~n str80   %80s                  
+*r_s_notes       str80   %80s                  notes from survery
+*repround        float   %9.0g                 actual round of activity when
+*                                                this is not as same as round
+*seed            float   %9.0g                 dummy varaible whether they used
+*                                                seed or other chemicals
+*'''
+
 *
 
-*'''    FIXED EFFECTS REGRESSION
-*$var_dependent: log_yield
-*$var_independent: ? ?
-*$fe_: ?
-*ixtreg var_dependent var_independent, vce(fe_)
-*residuals_vhtci = ln_yield - ?
+
+*use ...
+*merge 1:1 $varlist using dataset.dta
+*save pset2_dataset.dta, replace
+
+
+* Generate gender
+gen female = .
+if id == 1 replace female = 1
+if id == 0 replace female = 0
+drop if female == .
+
+
+* Generate fixed effects
+gen fe_vtc  = (village * 10000) + (fcrop * 100) + round
+label var fe_vtc "vtc Fixed Effects"
+gen fe_vhtc = (fe_vtc * 100) + hhn
+label var fe_vhtc "vhtc Fixed Effects"
+
+
+* Dependent variable is log of yield (vhtci)
+** {yield = tot_value / tot_area}
+** => ln_yield = ln( tot_value / tot_area )
+** => ln_yield = ln( tot_value ) - ln( tot_area )
+gen ln_yield = ln_value - ln_area
+label var ln_yield "Log of Yield"
+
+
+* Fixed Effects Regression
+** {xtreg, fe i(.)}				Command format
+** {topo* soil* loc* ln_area}	Covariates matrix
+** {totarea lntarea lnhhsize}	Exclude
+
+*** use #  for interaction
+*** use *  for wildcard
+*** use i. for categorical
+
+global dependent    "ln_yield"
+global soil         "ph oc om"
+global land         "$soil i.soiltype i.topo* ln_area"
+global independent  "female fertiliser $land"
+
+xtreg $dependent $independent, fe i(fe_vhtc)
+predict residuals_v, e
+label var residuals_v "Residuals"
