@@ -96,11 +96,17 @@ use landc.dta
 gen year = year(date)
 replace year = 1 if year == 1997
 replace year = 2 if year == 1998
-keep village hhn respondent_number plot_number date toposequence soil* area year
+keep village hhn respondent_number plot_number date toposequence soil* area* year
 rename respondent_number id
 rename plot_number plot
 rename toposequence topo
-gen ln_area = log(area)
+replace topo = 3 if topo == "3 (60%), 9 (40%)" | if topo == "3 (50%), 9 (50%)"
+replace topo = 9 if topo == "3 (30%), 9 (70%)" | if topo == "3 (40%), 9 (60%)" | if topo == "5 (30%), 9 (70%)" | if topo == "9 (90%), 3 (10%)"
+replace topo = 3 if topo == "3, 5"
+replace topo = 9 if topo == "5, 9"
+replace topo = 5 if topo == "flat"
+drop if topo == "hilly" | topo == "very"
+gen ln_area = log(area_sqm)
 gen soiltype = .
 
 replace soiltype = "red sandy" if soil_description == "ama sika" | if soil_description == "pongpong" | if soil_description == "red soil" | if soil_description == "sand (nfutuma)" | if soil_description == "sandy" | if soil_description == "sandy, mbe sika"
