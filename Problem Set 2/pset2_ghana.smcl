@@ -1,0 +1,665 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/studentuser/Desktop/Ghana/pset2_ghana.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}27 May 2019, 10:03:58
+
+{com}. do "/Users/studentuser/Desktop/Ghana/pset2_source.do"
+{txt}
+{com}. * Development Economics: Problem Set 2
+. * S M Sajid Al Sanai
+. 
+. 
+. *"""    SOILDATA.DTA
+. use /Users/studentuser/Desktop/Ghana/soildata.dta
+{txt}
+{com}. gen year = .
+{txt}(1262 missing values generated)
+
+{com}. replace year = 2
+{txt}(1262 real changes made)
+
+{com}. save /Users/studentuser/Desktop/Ghana/temp_soildata.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/temp_soildata.dta saved
+
+{com}. replace year = 1
+{txt}(1262 real changes made)
+
+{com}. append using /Users/studentuser/Desktop/Ghana/temp_soildata.dta
+{txt}
+{com}. gen ph = .
+{txt}(2524 missing values generated)
+
+{com}. gen oc = .
+{txt}(2524 missing values generated)
+
+{com}. gen om = .
+{txt}(2524 missing values generated)
+
+{com}. replace ph = ph97 if year == 1
+{txt}(740 real changes made)
+
+{com}. replace ph = ph98 if year == 2
+{txt}(1148 real changes made)
+
+{com}. replace oc = oc97 if year == 1
+{txt}(740 real changes made)
+
+{com}. replace oc = oc98 if year == 2
+{txt}(1148 real changes made)
+
+{com}. replace om = om97 if year == 1
+{txt}(740 real changes made)
+
+{com}. replace om = om98 if year == 2
+{txt}(1148 real changes made)
+
+{com}. keep village hhn id ph oc om number plot year
+{txt}
+{com}. * v h c t i
+. save /Users/studentuser/Desktop/Ghana/temp_soildata.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/temp_soildata.dta saved
+
+{com}. clear
+{txt}
+{com}. 
+. *"""    LANDC.DTA
+. use /Users/studentuser/Desktop/Ghana/landc.dta
+{txt}
+{com}. gen year = year(date)
+{txt}(17 missing values generated)
+
+{com}. replace year = 0 if year == 1996
+{txt}(135 real changes made)
+
+{com}. replace year = 1 if year == 1997
+{txt}(500 real changes made)
+
+{com}. replace year = 2 if year == 1998
+{txt}(626 real changes made)
+
+{com}. tab year
+
+       {txt}year {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}        135       10.69       10.69
+{txt}          1 {c |}{res}        500       39.59       50.28
+{txt}          2 {c |}{res}        626       49.56       99.84
+{txt}        987 {c |}{res}          1        0.08       99.92
+{txt}       1992 {c |}{res}          1        0.08      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      1,263      100.00
+{txt}
+{com}. drop if year > 2
+{txt}(19 observations deleted)
+
+{com}. gen month = month(date)
+{txt}
+{com}. gen day = day(date)
+{txt}
+{com}. gen round = .
+{txt}(1261 missing values generated)
+
+{com}. replace round = 1 if year == 0
+{txt}(135 real changes made)
+
+{com}. replace round = 9 if year == 1 & ((month == 12 & day <= 31) | (month < 11))
+{txt}(434 real changes made)
+
+{com}. replace round = 8 if year == 1 & ((month == 12 & day < 2) | (month < 12))
+{txt}(453 real changes made)
+
+{com}. replace round = 7 if year == 1 & ((month == 9 & day < 29) | (month < 9))
+{txt}(343 real changes made)
+
+{com}. replace round = 6 if year == 1 & ((month == 8 & day < 18) | (month < 8))
+{txt}(305 real changes made)
+
+{com}. replace round = 5 if year == 1 & ((month == 7 & day < 7) | (month < 7))
+{txt}(262 real changes made)
+
+{com}. replace round = 4 if year == 1 & ((month == 6 & day < 2) | (month < 6))
+{txt}(209 real changes made)
+
+{com}. replace round = 3 if year == 1 & ((month == 4 & day < 14) | (month < 4))
+{txt}(157 real changes made)
+
+{com}. replace round = 2 if year == 1 & ((month == 3 & day < 3) | (month < 3))
+{txt}(99 real changes made)
+
+{com}. replace round = 1 if year == 1 & ((month == 1 & day < 27))
+{txt}(22 real changes made)
+
+{com}. replace round = 15 if year == 2 & ((month == 8 & day >= 10) | (month > 8))
+{txt}(312 real changes made)
+
+{com}. replace round = 14 if year == 2 & ((month == 8 & day < 10) | (month < 8))
+{txt}(314 real changes made)
+
+{com}. replace round = 13 if year == 2 & ((month == 7 & day < 5) | (month < 7))
+{txt}(272 real changes made)
+
+{com}. replace round = 12 if year == 2 & ((month < 7))
+{txt}(267 real changes made)
+
+{com}. replace round = 11 if year == 2 & ((month == 4 & day < 20) | (month < 4))
+{txt}(155 real changes made)
+
+{com}. replace round = 10 if year == 2 & ((month == 3 & day < 16) | (month < 3))
+{txt}(134 real changes made)
+
+{com}. replace round = 9 if year == 2 & ((month == 10 & day < 20))
+{txt}(8 real changes made)
+
+{com}. keep village hhn respondent_number plot_number date toposequence soil* area* day month year round
+{txt}
+{com}. rename respondent_number id
+{res}{txt}
+{com}. rename plot_number plot
+{res}{txt}
+{com}. rename toposequence topo
+{res}{txt}
+{com}. replace topo = "3" if topo == "3 (60%), 9 (40%)" | topo == "3 (50%), 9 (50%)"
+{txt}(2 real changes made)
+
+{com}. replace topo = "9" if topo == "3 (30%), 9 (70%)" | topo == "3 (40%), 9 (60%)" | topo == "5 (30%), 9 (70%)" | topo == "9 (90%), 3 (10%)"
+{txt}(5 real changes made)
+
+{com}. replace topo = "3" if topo == "3, 5"
+{txt}(3 real changes made)
+
+{com}. replace topo = "9" if topo == "5, 9"
+{txt}(1 real change made)
+
+{com}. replace topo = "5" if topo == "flat"
+{txt}(28 real changes made)
+
+{com}. drop if topo == "hilly" | topo == "very"
+{txt}(4 observations deleted)
+
+{com}. destring topo, generate(ftopo)
+{txt}topo has all characters numeric; ftopo {res}generated {txt}as {res}byte
+{txt}(13 missing values generated)
+
+{com}. drop topo
+{txt}
+{com}. rename ftopo topo
+{res}{txt}
+{com}. gen ln_area = log(area_sqm)
+{txt}(9 missing values generated)
+
+{com}. xtile deciles_area = area_sqm, nq(10)
+{txt}
+{com}. gen soiltype = ""
+{txt}(1257 missing values generated)
+
+{com}. replace soiltype = "red sandy" if soil_description == "ama sika" | soil_description == "pongpong" | soil_description == "red soil" | soil_description == "sand (nfutuma)" | soil_description == "sandy" | soil_description == "sandy, mbe sika"
+{txt}soiltype was {res}str1{txt} now {res}str9
+{txt}(702 real changes made)
+
+{com}. replace soiltype = "black sandy" if soil_description == "black and sandy" | soil_description == "black and sandy soil" | soil_description == "black loose soil" | soil_description == "black sand" | soil_description == "black soil" | soil_description == "black soil and red soil" | soil_description == "blank soil" | soil_description == "blind soil" | soil_description == "hard soil" | soil_description == "loose black soil" | soil_description == "marshy (black soil)" | soil_description == "oworam" | soil_description == "red and black soil" | soil_description == "sandy and black soil" | soil_description == "sandy black" | soil_description == "sandy black soil" | soil_description == "sandy soil"
+{txt}soiltype was {res}str9{txt} now {res}str11
+{txt}(129 real changes made)
+
+{com}. replace soiltype = "rocky" if soil_description == "bipuosu " | soil_description == "hard sandy" | soil_description == "rocky" | soil_description == "rocky (black soil)" | soil_description == "rocky and sandy" | soil_description == "rocky red soil" | soil_description == "rocky, sandy" | soil_description == "sand and rocky" | soil_description == "sandy and rocky" | soil_description == "sandy and very stony" | soil_description == "sandy rocks" | soil_description == "stony"
+{txt}(20 real changes made)
+
+{com}. replace soiltype = "gravels" if soil_description == "abu siabu" | soil_description == "afo nwa" | soil_description == "black soil wilt stones" | soil_description == "gravels" | soil_description == "gravels (mbosia)" | soil_description == "mbe sika" | soil_description == "mbe sika with small stones" | soil_description == "mbe sika, sandy" | soil_description == "nbe sika" | soil_description == "nbusia" | soil_description == "nbusia, rocky" | soil_description == "sand and gravels" | soil_description == "sandy (nbesika)" | soil_description == "sandy and gravels"
+{txt}(29 real changes made)
+
+{com}. replace soiltype = "clay" if soil_description == "akrampasu" | soil_description == "akranpasu" | soil_description == "ameti" | soil_description == "ameti and sand" | soil_description == "asase kokoo" | soil_description == "askrampasu" | soil_description == "atwepi" | soil_description == "atwepi abo" | soil_description == "atwipi" | soil_description == "black and red soil (clay)" | soil_description == "black soil and clay" | soil_description == "clay" | soil_description == "clay (red soil)" | soil_description == "clay and black soil" | soil_description == "clay and sand" | soil_description == "clay and sandy" | soil_description == "clay sand" | soil_description == "hard clay" | soil_description == "marshy" | soil_description == "nso nwea (clay and sand)" | soil_description == "otanim (clay)" | soil_description == "otari" | soil_description == "sand and clay" | soil_description == "sandy (clay)" | soil_description == "sandy and clay" | soil_description == "sandy and water log" | soil_description == "sandy clay" | soil_description == "siw asase" | soil_description == "water log"
+{txt}(253 real changes made)
+
+{com}. replace soiltype = "loamy" if soil_description == "loam and clay" | soil_description == "loamy" | soil_description == "lomay" | soil_description == "refuse dump"
+{txt}(98 real changes made)
+
+{com}. replace soiltype = "rocky clay" if soil_description == "ameti with rocks" | soil_description == "clay and gravels" | soil_description == "clay and rocky" | soil_description == "clay rocks" | soil_description == "white sand" | soil_description == "white soil (sandy)"
+{txt}(10 real changes made)
+
+{com}. rename soiltype soilt
+{res}{txt}
+{com}. gen soiltype = .
+{txt}(1257 missing values generated)
+
+{com}. replace soiltype = 0 if soilt == "red sandy"
+{txt}(702 real changes made)
+
+{com}. replace soiltype = 1 if soilt == "black sandy"
+{txt}(129 real changes made)
+
+{com}. replace soiltype = 2 if soilt == "rocky"
+{txt}(20 real changes made)
+
+{com}. replace soiltype = 3 if soilt == "gravels"
+{txt}(29 real changes made)
+
+{com}. replace soiltype = 4 if soilt == "clay"
+{txt}(253 real changes made)
+
+{com}. replace soiltype = 5 if soilt == "loamy"
+{txt}(98 real changes made)
+
+{com}. replace soiltype = 6 if soilt == "rocky clay"
+{txt}(10 real changes made)
+
+{com}. rename soilt soilcategory
+{res}{txt}
+{com}. save /Users/studentuser/Desktop/Ghana/temp_landc.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/temp_landc.dta saved
+
+{com}. clear
+{txt}
+{com}. 
+. *"""    CROPC.DTA
+. use /Users/studentuser/Desktop/Ghana/cropc.dta
+{txt}
+{com}. gen year = year(date)
+{txt}(21 missing values generated)
+
+{com}. replace year = 0 if year == 1996
+{txt}(313 real changes made)
+
+{com}. replace year = 1 if year == 1997
+{txt}(742 real changes made)
+
+{com}. replace year = 2 if year == 1998
+{txt}(1037 real changes made)
+
+{com}. tab year
+
+       {txt}year {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}        313       14.92       14.92
+{txt}          1 {c |}{res}        742       35.37       50.29
+{txt}          2 {c |}{res}      1,037       49.43       99.71
+{txt}        987 {c |}{res}          2        0.10       99.81
+{txt}       1992 {c |}{res}          4        0.19      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      2,098      100.00
+{txt}
+{com}. drop if year > 2
+{txt}(27 observations deleted)
+
+{com}. gen month = month(date)
+{txt}
+{com}. gen day = day(date)
+{txt}
+{com}. gen round = .
+{txt}(2092 missing values generated)
+
+{com}. replace round = 1 if year == 0
+{txt}(313 real changes made)
+
+{com}. replace round = 9 if year == 1 & ((month == 12 & day <= 31) | (month < 11))
+{txt}(616 real changes made)
+
+{com}. replace round = 8 if year == 1 & ((month == 12 & day < 2) | (month < 12))
+{txt}(677 real changes made)
+
+{com}. replace round = 7 if year == 1 & ((month == 9 & day < 29) | (month < 9))
+{txt}(480 real changes made)
+
+{com}. replace round = 6 if year == 1 & ((month == 8 & day < 18) | (month < 8))
+{txt}(420 real changes made)
+
+{com}. replace round = 5 if year == 1 & ((month == 7 & day < 7) | (month < 7))
+{txt}(352 real changes made)
+
+{com}. replace round = 4 if year == 1 & ((month == 6 & day < 2) | (month < 6))
+{txt}(292 real changes made)
+
+{com}. replace round = 3 if year == 1 & ((month == 4 & day < 14) | (month < 4))
+{txt}(234 real changes made)
+
+{com}. replace round = 2 if year == 1 & ((month == 3 & day < 3) | (month < 3))
+{txt}(145 real changes made)
+
+{com}. replace round = 1 if year == 1 & ((month == 1 & day < 27))
+{txt}(37 real changes made)
+
+{com}. replace round = 15 if year == 2 & ((month == 8 & day >= 10) | (month > 8))
+{txt}(613 real changes made)
+
+{com}. replace round = 14 if year == 2 & ((month == 8 & day < 10) | (month < 8))
+{txt}(424 real changes made)
+
+{com}. replace round = 13 if year == 2 & ((month == 7 & day < 5) | (month < 7))
+{txt}(351 real changes made)
+
+{com}. replace round = 12 if year == 2 & ((month < 7))
+{txt}(344 real changes made)
+
+{com}. replace round = 11 if year == 2 & ((month == 4 & day < 20) | (month < 4))
+{txt}(199 real changes made)
+
+{com}. replace round = 10 if year == 2 & ((month == 3 & day < 16) | (month < 3))
+{txt}(179 real changes made)
+
+{com}. replace round = 9 if year == 2 & ((month == 10 & day < 20))
+{txt}(12 real changes made)
+
+{com}. keep village hhn respondent_number plot_number crop year day month round
+{txt}
+{com}. rename respondent_number id
+{res}{txt}
+{com}. rename plot_number plot
+{res}{txt}
+{com}. save /Users/studentuser/Desktop/Ghana/temp_cropc.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/temp_cropc.dta saved
+
+{com}. clear
+{txt}
+{com}. 
+. *"""    PLOTACT.DTA
+. use /Users/studentuser/Desktop/Ghana/plotact.dta
+{txt}
+{com}. save /Users/studentuser/Desktop/Ghana/temp_plotact.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/temp_plotact.dta saved
+
+{com}. clear
+{txt}
+{com}. 
+. *"""    PLOTHARV.DTA
+. use /Users/studentuser/Desktop/Ghana/plotharv.dta
+{txt}
+{com}. keep village hhn id plot crop round value
+{txt}
+{com}. rename value gross_value
+{res}{txt}
+{com}. gen ln_value = log(gross_value)
+{txt}(10 missing values generated)
+
+{com}. save /Users/studentuser/Desktop/Ghana/temp_plotharv.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/temp_plotharv.dta saved
+
+{com}. clear
+{txt}
+{com}. 
+. *"""    PLOTINP.DTA
+. use /Users/studentuser/Desktop/Ghana/plotinp.dta
+{txt}
+{com}. gen fertiliser = .
+{txt}(3008 missing values generated)
+
+{com}. replace fertiliser = 0 if input != ""
+{txt}(3007 real changes made)
+
+{com}. replace fertiliser = 1 if input == "fertilizer" | (real(input) >= 41 & real(input) <= 49)
+{txt}(279 real changes made)
+
+{com}. keep village hhn id plot round unit quantity fertiliser value
+{txt}
+{com}. save /Users/studentuser/Desktop/Ghana/temp_plotinp.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/temp_plotinp.dta saved
+
+{com}. clear
+{txt}
+{com}. 
+. * Merge
+. use /Users/studentuser/Desktop/Ghana/temp_landc.dta
+{txt}
+{com}. sort village hhn id plot round
+{txt}
+{com}. merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_cropc.dta
+{res}{txt}hhn was {res}byte{txt} now {res}int
+
+{txt}{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}             835
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}             835{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}           1,257{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. sort village hhn id plot round crop
+{txt}
+{com}. drop if _merge != 3
+{txt}(835 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_plotinp.dta
+{res}{txt}hhn was {res}int{txt} now {res}float
+{txt}id was {res}byte{txt} now {res}float
+{txt}plot was {res}byte{txt} now {res}float
+
+{txt}{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}           1,751
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}           1,751{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}           1,257{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. sort village hhn id plot round crop
+{txt}
+{com}. drop if _merge != 3
+{txt}(1751 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_plotact.dta
+{res}
+{txt}{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}          13,319
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}          13,319{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}           1,257{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. sort village hhn id plot round crop
+{txt}
+{com}. drop if _merge != 3
+{txt}(13319 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_plotharv.dta
+{res}{txt}crop was {res}str10{txt} now {res}str25
+
+{txt}{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}           2,477
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}           2,477{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}           1,257{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. sort village hhn id plot round crop
+{txt}
+{com}. drop if _merge != 3
+{txt}(2477 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_soildata.dta
+{res}{txt}village was {res}byte{txt} now {res}float
+
+{txt}{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}           1,267
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}           1,267{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}           1,257{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. sort village hhn id plot round crop
+{txt}
+{com}. drop if _merge != 3
+{txt}(1267 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. save /Users/studentuser/Desktop/Ghana/pset2_ghana.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/pset2_ghana.dta saved
+
+{com}. 
+. * Generate crop
+. replace crop = "24" if crop == "coconut"
+{txt}(1 real change made)
+
+{com}. replace crop = "0" if crop == "fallow"
+{txt}(20 real changes made)
+
+{com}. replace crop = "36" if crop == "mango"
+{txt}(1 real change made)
+
+{com}. replace crop = "37" if crop == "pear"
+{txt}(5 real changes made)
+
+{com}. replace crop = "38" if crop == "teak"
+{txt}(3 real changes made)
+
+{com}. destring crop, generate(fcrop)
+{txt}crop has all characters numeric; fcrop {res}generated {txt}as {res}byte
+{txt}(4 missing values generated)
+
+{com}. drop crop
+{txt}
+{com}. rename fcrop crop
+{res}{txt}
+{com}. 
+. * Generate gender
+. gen female = .
+{txt}(1257 missing values generated)
+
+{com}. replace female = 1 if id == 1
+{txt}(293 real changes made)
+
+{com}. replace female = 0 if id == 0
+{txt}(942 real changes made)
+
+{com}. drop if female == .
+{txt}(22 observations deleted)
+
+{com}. 
+. * Generate fixed effects
+. gen fe_vtc  = (village * 10000) + (crop * 100) + round
+{txt}(4 missing values generated)
+
+{com}. label var fe_vtc "vtc Fixed Effects"
+{txt}
+{com}. gen fe_vhtc = (fe_vtc * 100) + hhn
+{txt}(4 missing values generated)
+
+{com}. label var fe_vhtc "vhtc Fixed Effects"
+{txt}
+{com}. 
+. * Dependent variable is log of yield (vhtci)
+. ** {c -(}yield = tot_value / tot_area{c )-}
+. ** => ln_yield = ln( tot_value / tot_area )
+. ** => ln_yield = ln( tot_value ) - ln( tot_area )
+. gen ln_yield = ln_value - ln_area
+{txt}(10 missing values generated)
+
+{com}. label var ln_yield "Log of Yield"
+{txt}
+{com}. 
+. save /Users/studentuser/Desktop/Ghana/pset2_ghana.dta, replace
+{txt}file /Users/studentuser/Desktop/Ghana/pset2_ghana.dta saved
+
+{com}. 
+. * Fixed Effects Regression
+. ** {c -(}xtreg, fe i(.){c )-}                             Command format
+. ** {c -(}topo* soil* loc* ln_area{c )-}   Covariates matrix
+. ** {c -(}totarea lntarea lnhhsize{c )-}   Exclude
+. 
+. *** use #  for interaction
+. *** use *  for wildcard
+. *** use i. for categorical
+. 
+. global dependent    "ln_yield"
+{txt}
+{com}. global soil         "ph oc om"
+{txt}
+{com}. global land         "$soil i.soiltype i.topo i.deciles_area"
+{txt}
+{com}. global independent  "female fertiliser $land"
+{txt}
+{com}. 
+. xtreg $dependent $independent, fe i(fe_vhtc)
+{txt}note: fertiliser omitted because of collinearity
+note: 2.topo omitted because of collinearity
+note: 4.topo omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs      = {res}      699
+{txt}Group variable: {res}fe_vhtc                         {txt}Number of groups   = {res}      550
+
+{txt}R-sq:  within  = {res}0.3435                         {txt}Obs per group: min = {res}        1
+{txt}       between = {res}0.2135                                        {txt}avg = {res}      1.3
+{txt}       overall = {res}0.2462                                        {txt}max = {res}        6
+
+                                                {txt}F({res}22{txt},{res}127{txt})          = {res}     3.02
+{txt}corr(u_i, Xb)  = {res}-0.3353                        {txt}Prob > F           =    {res}0.0001
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    ln_yield{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}female {c |}{col 14}{res}{space 2}-1.489985{col 26}{space 2} 1.406406{col 37}{space 1}   -1.06{col 46}{space 3}0.291{col 54}{space 4}-4.273009{col 67}{space 3} 1.293039
+{txt}{space 2}fertiliser {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 10}ph {c |}{col 14}{res}{space 2}-.3057513{col 26}{space 2}  .767567{col 37}{space 1}   -0.40{col 46}{space 3}0.691{col 54}{space 4}-1.824628{col 67}{space 3} 1.213125
+{txt}{space 10}oc {c |}{col 14}{res}{space 2}-2.983424{col 26}{space 2} 7.160223{col 37}{space 1}   -0.42{col 46}{space 3}0.678{col 54}{space 4}-17.15221{col 67}{space 3} 11.18536
+{txt}{space 10}om {c |}{col 14}{res}{space 2} 1.521138{col 26}{space 2} 4.142216{col 37}{space 1}    0.37{col 46}{space 3}0.714{col 54}{space 4} -6.67556{col 67}{space 3} 9.717836
+{txt}{space 12} {c |}
+{space 4}soiltype {c |}
+{space 10}1  {c |}{col 14}{res}{space 2}-1.205379{col 26}{space 2} 2.405833{col 37}{space 1}   -0.50{col 46}{space 3}0.617{col 54}{space 4}-5.966089{col 67}{space 3} 3.555331
+{txt}{space 10}2  {c |}{col 14}{res}{space 2} .3910859{col 26}{space 2} 3.320163{col 37}{space 1}    0.12{col 46}{space 3}0.906{col 54}{space 4}-6.178917{col 67}{space 3} 6.961089
+{txt}{space 10}3  {c |}{col 14}{res}{space 2}  5.43825{col 26}{space 2} 4.856502{col 37}{space 1}    1.12{col 46}{space 3}0.265{col 54}{space 4}-4.171891{col 67}{space 3} 15.04839
+{txt}{space 10}4  {c |}{col 14}{res}{space 2} .2223223{col 26}{space 2} 1.560196{col 37}{space 1}    0.14{col 46}{space 3}0.887{col 54}{space 4}-2.865024{col 67}{space 3} 3.309669
+{txt}{space 10}5  {c |}{col 14}{res}{space 2}-2.656873{col 26}{space 2} 6.114886{col 37}{space 1}   -0.43{col 46}{space 3}0.665{col 54}{space 4}-14.75713{col 67}{space 3} 9.443382
+{txt}{space 10}6  {c |}{col 14}{res}{space 2} 1.339944{col 26}{space 2} 8.220093{col 37}{space 1}    0.16{col 46}{space 3}0.871{col 54}{space 4}-14.92614{col 67}{space 3} 17.60602
+{txt}{space 12} {c |}
+{space 8}topo {c |}
+{space 10}2  {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 10}3  {c |}{col 14}{res}{space 2}-1.106811{col 26}{space 2} 8.124131{col 37}{space 1}   -0.14{col 46}{space 3}0.892{col 54}{space 4}  -17.183{col 67}{space 3} 14.96938
+{txt}{space 10}4  {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (omitted)
+{space 10}5  {c |}{col 14}{res}{space 2} 1.597631{col 26}{space 2} 8.280279{col 37}{space 1}    0.19{col 46}{space 3}0.847{col 54}{space 4}-14.78755{col 67}{space 3} 17.98281
+{txt}{space 10}9  {c |}{col 14}{res}{space 2} 4.653562{col 26}{space 2} 8.560849{col 37}{space 1}    0.54{col 46}{space 3}0.588{col 54}{space 4}-12.28681{col 67}{space 3} 21.59394
+{txt}{space 12} {c |}
+deciles_area {c |}
+{space 10}2  {c |}{col 14}{res}{space 2}-.0197488{col 26}{space 2}  1.78712{col 37}{space 1}   -0.01{col 46}{space 3}0.991{col 54}{space 4}-3.556137{col 67}{space 3} 3.516639
+{txt}{space 10}3  {c |}{col 14}{res}{space 2}-1.946396{col 26}{space 2}  1.68398{col 37}{space 1}   -1.16{col 46}{space 3}0.250{col 54}{space 4}-5.278688{col 67}{space 3} 1.385896
+{txt}{space 10}4  {c |}{col 14}{res}{space 2}-3.020471{col 26}{space 2} 1.936647{col 37}{space 1}   -1.56{col 46}{space 3}0.121{col 54}{space 4}-6.852745{col 67}{space 3} .8118039
+{txt}{space 10}5  {c |}{col 14}{res}{space 2}-1.975903{col 26}{space 2} 2.107987{col 37}{space 1}   -0.94{col 46}{space 3}0.350{col 54}{space 4}-6.147229{col 67}{space 3} 2.195423
+{txt}{space 10}6  {c |}{col 14}{res}{space 2}-4.424607{col 26}{space 2} 4.271826{col 37}{space 1}   -1.04{col 46}{space 3}0.302{col 54}{space 4}-12.87778{col 67}{space 3} 4.028566
+{txt}{space 10}7  {c |}{col 14}{res}{space 2}-3.453317{col 26}{space 2} 2.169527{col 37}{space 1}   -1.59{col 46}{space 3}0.114{col 54}{space 4}-7.746418{col 67}{space 3} .8397847
+{txt}{space 10}8  {c |}{col 14}{res}{space 2}-3.120921{col 26}{space 2} 3.275367{col 37}{space 1}   -0.95{col 46}{space 3}0.342{col 54}{space 4}-9.602281{col 67}{space 3} 3.360439
+{txt}{space 10}9  {c |}{col 14}{res}{space 2}-6.707254{col 26}{space 2}  2.82439{col 37}{space 1}   -2.37{col 46}{space 3}0.019{col 54}{space 4}-12.29621{col 67}{space 3}-1.118295
+{txt}{space 9}10  {c |}{col 14}{res}{space 2} -12.6011{col 26}{space 2} 2.245775{col 37}{space 1}   -5.61{col 46}{space 3}0.000{col 54}{space 4}-17.04509{col 67}{space 3}-8.157118
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 8.000379{col 26}{space 2} 9.564352{col 37}{space 1}    0.84{col 46}{space 3}0.404{col 54}{space 4}-10.92575{col 67}{space 3} 26.92651
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} 4.4693919
+     {txt}sigma_e {c |} {res} 5.2111413
+         {txt}rho {c |} {res} .42382444{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0:     F({res}549{txt}, {res}127{txt}) = {res}    0.52            {txt}Prob > F = {res}1.0000
+{txt}
+{com}. predict residuals_v, e
+{txt}(536 missing values generated)
+
+{com}. label var residuals_v "Residuals"
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/studentuser/Desktop/Ghana/pset2_ghana.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}27 May 2019, 10:04:29
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
