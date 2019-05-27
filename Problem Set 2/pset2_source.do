@@ -310,7 +310,7 @@ use /Users/studentuser/Desktop/Ghana/plotinp.dta
 gen fertiliser = .
 replace fertiliser = 0 if input != ""
 replace fertiliser = 1 if input == "fertilizer" | (real(input) >= 41 & real(input) <= 49)
-keep village hhn id plot round unit quantity
+keep village hhn id plot round unit quantity fertiliser value
 save /Users/studentuser/Desktop/Ghana/temp_plotinp.dta, replace
 clear
 
@@ -340,7 +340,8 @@ clear
 
 
 * Merge
-*use ...
+use /Users/studentuser/Desktop/Ghana/temp_plotinp.dta
+sort village hhn id plot round
 *merge 1:1 $varlist using dataset.dta
 *merge 1:1 observations using temp_plotact.dta
 *merge 1:1 observations using temp_plotharv.dta
@@ -359,7 +360,7 @@ drop if female == .
 
 
 * Generate fixed effects
-gen fe_vtc  = (village * 10000) + (fcrop * 100) + round
+gen fe_vtc  = (village * 10000) + (crop * 100) + round
 label var fe_vtc "vtc Fixed Effects"
 gen fe_vhtc = (fe_vtc * 100) + hhn
 label var fe_vhtc "vhtc Fixed Effects"
