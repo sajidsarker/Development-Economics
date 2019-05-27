@@ -340,22 +340,70 @@ clear
 
 
 * Merge
-use /Users/studentuser/Desktop/Ghana/temp_plotinp.dta
+use /Users/studentuser/Desktop/Ghana/temp_landc.dta
 sort village hhn id plot round
-*merge 1:1 $varlist using dataset.dta
-*merge 1:1 observations using temp_plotact.dta
-*merge 1:1 observations using temp_plotharv.dta
-*merge 1:1 observations using temp_plotinp.dta
-*merge 1:1 observations using temp_cropc.dta
-*merge 1:1 observations using temp_landc.dta
-*merge 1:1 observations using temp_soildata.dta
-*save pset2_dataset.dta, replace
+merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_cropc.dta
+sort village hhn id plot round crop
+drop if _merge != 3
+drop _merge
+merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_plotinp.dta
+sort village hhn id plot round crop
+drop if _merge != 3
+drop _merge
+merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_plotact.dta
+sort village hhn id plot round crop
+drop if _merge != 3
+drop _merge
+merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_plotharv.dta
+sort village hhn id plot round crop
+drop if _merge != 3
+drop _merge
+merge 1:1 _n using /Users/studentuser/Desktop/Ghana/temp_soildata.dta
+sort village hhn id plot round crop
+drop if _merge != 3
+drop _merge
+save /Users/studentuser/Desktop/Ghana/pset2_ghana.dta, replace
+
+
+* Generate crop
+1 Cassava
+2 Maize
+3 Plantain
+4 Cocoyam
+5 Yam
+6 Pineapple
+7 Tomato
+8 Garden egg
+9 Okro
+10 Pepper
+11 Oranges
+12 Banana
+13 Avocado
+14 Oil Palm
+15 Cocoa
+16 Sugar Cane
+17 Bean
+18 Groundnut
+19 Cabbage
+20 Cocoa
+21 Pawpaw
+22 Firewood
+23 Watermelon
+24 Coconut
+25 Cashew
+26 Ginger
+27 Sweet pepper
+28 Potato
+29 Sun flower
+30 Teak
+31 Agusi
+35 Onion
 
 
 * Generate gender
 gen female = .
-if id == 1 replace female = 1
-if id == 0 replace female = 0
+replace female = 1 if id == 1
+replace female = 0 if id == 0
 drop if female == .
 
 
