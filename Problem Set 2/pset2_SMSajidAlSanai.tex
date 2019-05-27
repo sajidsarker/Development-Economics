@@ -1,10 +1,8 @@
 \documentclass{article}
 
-\usepackage{amsmath}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{amsmath, color, placeins, setspace, graphicx}
 \usepackage{listings}
-\usepackage{color}
-\usepackage{placeins}
-\usepackage{graphicx}
 \graphicspath{ {/home/sajid/Desktop/Computational-Economics/Problem Set 1} }
 
 \title{Development Economics: Problem Set 2}
@@ -35,29 +33,68 @@
 
 \subsection{Results}
 
-Using the Ghana dataset, I replicated the model ...
+Using cleaned Ghana datasets, I replicated the model from the previous problem set.
+
+\newline
 
 % Code Snippet
 \begin{lstlisting}
-Estimation of Parameters and respective Standard Errors:
-Beta[0]:     [25.36425337]; (0.11561192456479381) 0.013366117101575576
-Beta[1]:     [-1.48315299]; (3.004018606720816) 9.024127789524872
-Beta[2]:     [0.18493143]; (0.04011846630681128) 0.001609491338810752
-Alpha:       [-8.37344604]; (0.003586413934865264) 1.2862364912195745e-05
-Sigma Alpha: [1.075]; (1.265210529517815) 1.6007576840027502
+-------------------------------------------------------------------------------------
+           ln_yield |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------+----------------------------------------------------------------
+             female |   -1.42802   1.467602    -0.97   0.332    -4.333048    1.477008
+fertiliser_quantity |   .0481314   .0542881     0.89   0.377    -.0593285    .1555913
+                 ph |  -.3368012   .7782551    -0.43   0.666    -1.877309    1.203707
+                 oc |  -1.039273   7.593463    -0.14   0.891    -16.07007    13.99152
+                 om |   .4267788    4.37492     0.10   0.922    -8.233106    9.086664
+                    |
+           soiltype |
+                 1  |  -.9487539   2.635692    -0.36   0.719    -6.165944    4.268436
+                 2  |   .6594256   3.387578     0.19   0.846    -6.046077    7.364928
+                 3  |    3.27172   5.466155     0.60   0.551    -7.548199    14.09164
+                 4  |   .1966215   1.604958     0.12   0.903    -2.980294    3.373537
+                 5  |  -2.965469   6.221397    -0.48   0.634    -15.28034    9.349404
+                 6  |   1.628645   8.366498     0.19   0.846    -14.93232    18.18961
+                    |
+               topo |
+                 2  |          0  (omitted)
+                 3  |  -.8469617   8.233856    -0.10   0.918    -17.14537    15.45145
+                 4  |          0  (omitted)
+                 5  |   1.756968   8.398051     0.21   0.835    -14.86646    18.38039
+                 9  |   4.851925   8.672712     0.56   0.577    -12.31518    22.01903
+                    |
+       deciles_area |
+                 2  |   .0161547   1.823157     0.01   0.993    -3.592672    3.624981
+                 3  |  -1.776003   1.718104    -1.03   0.303    -5.176885    1.624878
+                 4  |  -3.163836   1.997841    -1.58   0.116    -7.118439    .7907667
+                 5  |  -1.843065   2.165279    -0.85   0.396    -6.129103    2.442972
+                 6  |  -4.678732   4.372353    -1.07   0.287    -13.33354    3.976072
+                 7  |   -3.57888   2.332717    -1.53   0.128     -8.19635     1.03859
+                 8  |  -3.180382   3.328247    -0.96   0.341    -9.768442    3.407678
+                 9  |  -6.662023   2.876139    -2.32   0.022    -12.35516   -.9688821
+                10  |  -12.79748   2.330009    -5.49   0.000    -17.40959   -8.185367
+                    |
+              _cons |   7.562252   9.714092     0.78   0.438     -11.6662     26.7907
+--------------------+----------------------------------------------------------------
+            sigma_u |  4.9215408
+            sigma_e |  5.2734663
+                rho |  .46552169   (fraction of variance due to u_i)
+-------------------------------------------------------------------------------------
+F test that all u_i=0:     F(546, 123) =     0.51            Prob > F = 1.0000
 \end{lstlisting}
 
-Using the simulated data for the 3 product and 100 markets case calculated at the true parameters $\theta=\{\alpha, \beta, \sigma_\alpha\}$ and $\gamma$, I obtained the distributions for Prices, Profits, and the Consumer Surplus detailed below. Graphs for products 1-3 are aligned side-by-side for comparison.
-\par Distribution of prices for product 1 exhibit some bimodality and is centred around USD 3 - USD 4. Distribution of prices for product 2 appears skewed slightly toward lower prices and seems centred around USD 2. Distribution of prices for product 3 appears more normally distributed around average prices of USD 3. Profits are distributed relatively similarly across products with products 2 and 3 earning some higher profits than product 1. Consumer Surplus exhibits somewhat of a bimodal distribution, with a centred mean.
+It appears that the impact of female ownership of an agricultural plot on its yield while accounting for other plot-specific characteristics and non-labour inputs is negative. This would suggest that female ownership yields poorer returns on land. However, since the coefficients are not robust, and therefore we fail to reject the null hypothesis that the effects are jointly insignificant.
 
 \newpage
 
 \section{Code}
 
 \subsection{Source}
-\lstinputlisting{pset1_source.do}
+\lstinputlisting{pset2_source.do}
+
+\newpage
 
 \subsection{Output}
-\lstinputlisting{pset1_output.txt}
+\lstinputlisting{pset2_ghana.txt}
 
 \end{document}
