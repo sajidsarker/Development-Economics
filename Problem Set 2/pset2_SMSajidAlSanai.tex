@@ -1,0 +1,63 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{placeins}
+\usepackage{graphicx}
+\graphicspath{ {/home/sajid/Desktop/Computational-Economics/Problem Set 1} }
+
+\title{Development Economics: Problem Set 2}
+\author{S M Sajid Al Sanai}
+\date{May 25, 2019}
+
+\begin{document}
+
+\maketitle
+\pagenumbering{arabic}
+\tableofcontents
+
+\lstset{
+	frame=lines,
+	basicstyle=\small\sffamily,
+	tabsize=4,
+	columns=fixed,
+	showstringspaces=false,
+	showtabs=false,
+	keepspaces,
+	commentstyle=\color{red},
+	keywordstyle=\color{blue}
+}
+
+\newpage
+
+\section{Model}
+
+\subsection{Results}
+
+Using the Ghana dataset, I replicated the model ...
+
+% Code Snippet
+\begin{lstlisting}
+Estimation of Parameters and respective Standard Errors:
+Beta[0]:     [25.36425337]; (0.11561192456479381) 0.013366117101575576
+Beta[1]:     [-1.48315299]; (3.004018606720816) 9.024127789524872
+Beta[2]:     [0.18493143]; (0.04011846630681128) 0.001609491338810752
+Alpha:       [-8.37344604]; (0.003586413934865264) 1.2862364912195745e-05
+Sigma Alpha: [1.075]; (1.265210529517815) 1.6007576840027502
+\end{lstlisting}
+
+Using the simulated data for the 3 product and 100 markets case calculated at the true parameters $\theta=\{\alpha, \beta, \sigma_\alpha\}$ and $\gamma$, I obtained the distributions for Prices, Profits, and the Consumer Surplus detailed below. Graphs for products 1-3 are aligned side-by-side for comparison.
+\par Distribution of prices for product 1 exhibit some bimodality and is centred around USD 3 - USD 4. Distribution of prices for product 2 appears skewed slightly toward lower prices and seems centred around USD 2. Distribution of prices for product 3 appears more normally distributed around average prices of USD 3. Profits are distributed relatively similarly across products with products 2 and 3 earning some higher profits than product 1. Consumer Surplus exhibits somewhat of a bimodal distribution, with a centred mean.
+
+\newpage
+
+\section{Code}
+
+\subsection{Source}
+\lstinputlisting{pset1_source.do}
+
+\subsection{Output}
+\lstinputlisting{pset1_output.txt}
+
+\end{document}
