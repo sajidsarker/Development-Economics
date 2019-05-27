@@ -140,6 +140,8 @@ gen fertiliser = .
 replace fertiliser = 0 if input != ""
 replace fertiliser = 1 if input == "fertilizer" | (real(input) >= 41 & real(input) <= 49)
 keep village hhn id plot round unit quantity fertiliser value
+rename quantity fertiliser_quantity
+gen nlinp_fertiliser = fertiliser * fertiliser_quantity
 save /Users/studentuser/Desktop/Ghana/temp_plotinp.dta, replace
 clear
 
@@ -216,8 +218,13 @@ save /Users/studentuser/Desktop/Ghana/pset2_ghana.dta, replace
 global dependent    "ln_yield"
 global soil         "ph oc om"
 global land         "$soil i.soiltype i.topo i.deciles_area"
-global independent  "female fertiliser $land"
+global independent  "female fertiliser_quantity $land"
 
 xtreg $dependent $independent, fe i(fe_vhtc)
 predict residuals_v, e
 label var residuals_v "Residuals"
+
+*encode activity1, generate(numeric_activity)
+*xtreg $dependent $independent female#i.numeric_activity, fe i(fe_vhtc)
+*predict residuals_v, e
+*label var residuals_v "Residuals"
