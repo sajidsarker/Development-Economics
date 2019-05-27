@@ -1,13 +1,13 @@
 * Development Economics: Problem Set 2
 * S M Sajid Al Sanai
 
-use soildata.dta
+use /Users/studentuser/Desktop/Ghana/soildata.dta
 * drop if yearfrom != "both"
 gen year = .
 replace year = 2
-save temp_soildata.dta
+save /Users/studentuser/Desktop/Ghana/temp_soildata.dta, replace
 replace year = 1
-append temp_soildata.dta
+append using /Users/studentuser/Desktop/Ghana/temp_soildata.dta
 gen ph = .
 gen oc = .
 gen om = .
@@ -20,7 +20,7 @@ replace om = om98 if year == 2
 keep village hhn id ph oc om number plot year
 * v h c t i
 * What is number and plot?
-save temp_soildata.dta, replace
+save /Users/studentuser/Desktop/Ghana/temp_soildata.dta, replace
 clear
 
 *"""    SOILDATA.DTA
@@ -39,7 +39,7 @@ clear
 *"""
 
 * Avoid use
-use sales.dta
+use /Users/studentuser/Desktop/Ghana/sales.dta
 gen year = year(date)
 replace year = 1 if year == 1997
 replace year = 2 if year == 1998
@@ -48,7 +48,7 @@ keep village hhn id round crop date unit quantity value plot year
 bysort village hhn plot crop round: egen gross_value = total(value)
 gen log_value = log(gross_value)
 *gen log_yield = log_sales - log_quantity
-save temp_sales.dta, replace
+save /Users/studentuser/Desktop/Ghana/temp_sales.dta, replace
 clear
 
 *"""    SALES.DTA
@@ -92,38 +92,53 @@ clear
 *                                                since Christmas
 *"""
 
-use landc.dta
+use /Users/studentuser/Desktop/Ghana/landc.dta
 gen year = year(date)
+replace year = 0 if year == 1996
 replace year = 1 if year == 1997
 replace year = 2 if year == 1998
-keep village hhn respondent_number plot_number date toposequence soil* area* year
+tab year
+drop if year > 2
+gen month = month(date)
+gen day = day(date)
+gen round = .
+replace round = 1 if year == 0
+replace round = 9 if year == 1 & ((month == 12 & day <= 31) | (month < 11))
+replace round = 8 if year == 1 & ((month == 12 & day < 2) | (month < 12))
+replace round = 7 if year == 1 & ((month == 9 & day < 29) | (month < 9))
+replace round = 6 if year == 1 & ((month == 8 & day < 18) | (month < 8))
+replace round = 5 if year == 1 & ((month == 7 & day < 7) | (month < 7))
+replace round = 4 if year == 1 & ((month == 6 & day < 2) | (month < 6))
+replace round = 3 if year == 1 & ((month == 4 & day < 14) | (month < 4))
+replace round = 2 if year == 1 & ((month == 3 & day < 3) | (month < 3))
+replace round = 1 if year == 1 & ((month == 1 & day < 27))
+replace round = 15 if year == 2 & ((month == 8 & day >= 10) | (month > 8))
+replace round = 14 if year == 2 & ((month == 8 & day < 10) | (month < 8))
+replace round = 13 if year == 2 & ((month == 7 & day < 5) | (month < 7))
+replace round = 12 if year == 2 & ((month < 7))
+replace round = 11 if year == 2 & ((month == 4 & day < 20) | (month < 4))
+replace round = 10 if year == 2 & ((month == 3 & day < 16) | (month < 3))
+replace round = 9 if year == 2 & ((month == 10 & day < 20))
+keep village hhn respondent_number plot_number date toposequence soil* area* day month year round
 rename respondent_number id
 rename plot_number plot
 rename toposequence topo
-replace topo = 3 if topo == "3 (60%), 9 (40%)" | if topo == "3 (50%), 9 (50%)"
-replace topo = 9 if topo == "3 (30%), 9 (70%)" | if topo == "3 (40%), 9 (60%)" | if topo == "5 (30%), 9 (70%)" | if topo == "9 (90%), 3 (10%)"
-replace topo = 3 if topo == "3, 5"
-replace topo = 9 if topo == "5, 9"
-replace topo = 5 if topo == "flat"
+replace topo = "3" if topo == "3 (60%), 9 (40%)" | topo == "3 (50%), 9 (50%)"
+replace topo = "9" if topo == "3 (30%), 9 (70%)" | topo == "3 (40%), 9 (60%)" | topo == "5 (30%), 9 (70%)" | topo == "9 (90%), 3 (10%)"
+replace topo = "3" if topo == "3, 5"
+replace topo = "9" if topo == "5, 9"
+replace topo = "5" if topo == "flat"
 drop if topo == "hilly" | topo == "very"
 gen ln_area = log(area_sqm)
-gen soiltype = .
-
-replace soiltype = "red sandy" if soil_description == "ama sika" | if soil_description == "pongpong" | if soil_description == "red soil" | if soil_description == "sand (nfutuma)" | if soil_description == "sandy" | if soil_description == "sandy, mbe sika"
-
-replace soiltype = "black sandy" if soil_description == "black and sandy" | if soil_description == "black and sandy soil" | if soil_description == "black loose soil" | if soil_description == "black sand" | if soil_description == "black soil" | if soil_description == "black soil and red soil" | if soil_description == "blank soil" | if soil_description == "blind soil" | if soil_description == "hard soil" | if soil_description == "loose black soil" | if soil_description == "marshy (black soil)" | if soil_description == "oworam" | if soil_description == "red and black soil" | if soil_description == "sandy and black soil" | if soil_description == "sandy black" | if soil_description == "sandy black soil" | if soil_description == "sandy soil"
-
-replace soiltype = "rocky" if soil_description == "bipuosu " | if soil_description == "hard sandy" | if soil_description == "rocky" | if soil_description == "rocky (black soil)" | if soil_description == "rocky and sandy" | if soil_description == "rocky red soil" | if soil_description == "rocky, sandy" | if soil_description == "sand and rocky" | if soil_description == "sandy and rocky" | if soil_description == "sandy and very stony" | if soil_description == "sandy rocks" | if soil_description == "stony"
-
-replace soiltype = "gravels" if soil_description == "abu siabu" | if soil_description == "afo nwa" | if soil_description == "black soil wilt stones" | if soil_description == "gravels" | if soil_description == "gravels (mbosia)" | if soil_description == "mbe sika" | if soil_description == "mbe sika with small stones" | if soil_description == "mbe sika, sandy" | if soil_description == "nbe sika" | if soil_description == "nbusia" | if soil_description == "nbusia, rocky" | if soil_description == "sand and gravels" | if soil_description == "sandy (nbesika)" | if soil_description == "sandy and gravels"
-
-replace soiltype = "clay" if soil_description == "akrampasu" | if soil_description == "akranpasu" | if soil_description == "ameti" | if soil_description == "ameti and sand" | if soil_description == "asase kokoo" | if soil_description == "askrampasu" | if soil_description == "atwepi" | if soil_description == "atwepi abo" | if soil_description == "atwipi" | if soil_description == "black and red soil (clay)" | if soil_description == "black soil and clay" | if soil_description == "clay" | if soil_description == "clay (red soil)" | if soil_description == "clay and black soil" | if soil_description == "clay and sand" | if soil_description == "clay and sandy" | if soil_description == "clay sand" | if soil_description == "hard clay" | if soil_description == "marshy" | if soil_description == "nso nwea (clay and sand)" | if soil_description == "otanim (clay)" | if soil_description == "otari" | if soil_description == "sand and clay" | if soil_description == "sandy (clay)" | if soil_description == "sandy and clay" | if soil_description == "sandy and water log" | if soil_description == "sandy clay" | if soil_description == "siw asase" | if soil_description == "water log"
-
-replace soiltype = "loamy" if soil_description == "loam and clay" | if soil_description == "loamy" | if soil_description == "lomay" | if soil_description == "refuse dump"
-
-replace soiltype = "rocky clay" if soil_description == "ameti with rocks" | if soil_description == "clay and gravels" | if soil_description == "clay and rocky" | if soil_description == "clay rocks" | if soil_description == "white sand" | if soil_description == "white soil (sandy)"
-
-save temp_landc.dta, replace
+gen soiltype = ""
+replace soiltype = "red sandy" if soil_description == "ama sika" | soil_description == "pongpong" | soil_description == "red soil" | soil_description == "sand (nfutuma)" | soil_description == "sandy" | soil_description == "sandy, mbe sika"
+replace soiltype = "black sandy" if soil_description == "black and sandy" | soil_description == "black and sandy soil" | soil_description == "black loose soil" | soil_description == "black sand" | soil_description == "black soil" | soil_description == "black soil and red soil" | soil_description == "blank soil" | soil_description == "blind soil" | soil_description == "hard soil" | soil_description == "loose black soil" | soil_description == "marshy (black soil)" | soil_description == "oworam" | soil_description == "red and black soil" | soil_description == "sandy and black soil" | soil_description == "sandy black" | soil_description == "sandy black soil" | soil_description == "sandy soil"
+replace soiltype = "rocky" if soil_description == "bipuosu " | soil_description == "hard sandy" | soil_description == "rocky" | soil_description == "rocky (black soil)" | soil_description == "rocky and sandy" | soil_description == "rocky red soil" | soil_description == "rocky, sandy" | soil_description == "sand and rocky" | soil_description == "sandy and rocky" | soil_description == "sandy and very stony" | soil_description == "sandy rocks" | soil_description == "stony"
+replace soiltype = "gravels" if soil_description == "abu siabu" | soil_description == "afo nwa" | soil_description == "black soil wilt stones" | soil_description == "gravels" | soil_description == "gravels (mbosia)" | soil_description == "mbe sika" | soil_description == "mbe sika with small stones" | soil_description == "mbe sika, sandy" | soil_description == "nbe sika" | soil_description == "nbusia" | soil_description == "nbusia, rocky" | soil_description == "sand and gravels" | soil_description == "sandy (nbesika)" | soil_description == "sandy and gravels"
+replace soiltype = "clay" if soil_description == "akrampasu" | soil_description == "akranpasu" | soil_description == "ameti" | soil_description == "ameti and sand" | soil_description == "asase kokoo" | soil_description == "askrampasu" | soil_description == "atwepi" | soil_description == "atwepi abo" | soil_description == "atwipi" | soil_description == "black and red soil (clay)" | soil_description == "black soil and clay" | soil_description == "clay" | soil_description == "clay (red soil)" | soil_description == "clay and black soil" | soil_description == "clay and sand" | soil_description == "clay and sandy" | soil_description == "clay sand" | soil_description == "hard clay" | soil_description == "marshy" | soil_description == "nso nwea (clay and sand)" | soil_description == "otanim (clay)" | soil_description == "otari" | soil_description == "sand and clay" | soil_description == "sandy (clay)" | soil_description == "sandy and clay" | soil_description == "sandy and water log" | soil_description == "sandy clay" | soil_description == "siw asase" | soil_description == "water log"
+replace soiltype = "loamy" if soil_description == "loam and clay" | soil_description == "loamy" | soil_description == "lomay" | soil_description == "refuse dump"
+replace soiltype = "rocky clay" if soil_description == "ameti with rocks" | soil_description == "clay and gravels" | soil_description == "clay and rocky" | soil_description == "clay rocks" | soil_description == "white sand" | soil_description == "white soil (sandy)"
+save /Users/studentuser/Desktop/Ghana/temp_landc.dta, replace
 clear
 
 *"""    LANDC.DTA
@@ -178,14 +193,37 @@ clear
 *register_dec    str20   %20s                  who can register the land
 *"""
 
-use cropc.dta
+use /Users/studentuser/Desktop/Ghana/cropc.dta
 gen year = year(date)
+replace year = 0 if year == 1996
 replace year = 1 if year == 1997
 replace year = 2 if year == 1998
-keep village hhn respondent_number plot_number crop year
+tab year
+drop if year > 2
+gen month = month(date)
+gen day = day(date)
+gen round = .
+replace round = 1 if year == 0
+replace round = 9 if year == 1 & ((month == 12 & day <= 31) | (month < 11))
+replace round = 8 if year == 1 & ((month == 12 & day < 2) | (month < 12))
+replace round = 7 if year == 1 & ((month == 9 & day < 29) | (month < 9))
+replace round = 6 if year == 1 & ((month == 8 & day < 18) | (month < 8))
+replace round = 5 if year == 1 & ((month == 7 & day < 7) | (month < 7))
+replace round = 4 if year == 1 & ((month == 6 & day < 2) | (month < 6))
+replace round = 3 if year == 1 & ((month == 4 & day < 14) | (month < 4))
+replace round = 2 if year == 1 & ((month == 3 & day < 3) | (month < 3))
+replace round = 1 if year == 1 & ((month == 1 & day < 27))
+replace round = 15 if year == 2 & ((month == 8 & day >= 10) | (month > 8))
+replace round = 14 if year == 2 & ((month == 8 & day < 10) | (month < 8))
+replace round = 13 if year == 2 & ((month == 7 & day < 5) | (month < 7))
+replace round = 12 if year == 2 & ((month < 7))
+replace round = 11 if year == 2 & ((month == 4 & day < 20) | (month < 4))
+replace round = 10 if year == 2 & ((month == 3 & day < 16) | (month < 3))
+replace round = 9 if year == 2 & ((month == 10 & day < 20))
+keep village hhn respondent_number plot_number crop year day month round
 rename respondent_number id
 rename plot_number plot
-save temp_cropc.dta, replace
+save /Users/studentuser/Desktop/Ghana/temp_cropc.dta, replace
 clear
 
 *"""    CROPC.DTA
@@ -203,8 +241,8 @@ clear
 *date            long    %dD/N/Y               date of interview
 *"""
 
-use plotact.dta
-save temp_plotact.dta, replace
+use /Users/studentuser/Desktop/Ghana/plotact.dta
+save /Users/studentuser/Desktop/Ghana/temp_plotact.dta, replace
 clear
 
 *"""    PLOTACT.DTA
@@ -239,11 +277,11 @@ clear
 *                                                this is not as same as round
 *"""
 
-use plotharv.dta
+use /Users/studentuser/Desktop/Ghana/plotharv.dta
 keep village hhn id plot crop round value
 rename value gross_yield
 gen ln_yield = log(gross_yield)
-save temp_plotharv.dta, replace
+save /Users/studentuser/Desktop/Ghana/temp_plotharv.dta, replace
 clear
 
 *"""    PLOTHARV.DTA
@@ -268,12 +306,12 @@ clear
 *                                                this is not as same as round
 *"""
 
-use plotinp.dta
+use /Users/studentuser/Desktop/Ghana/plotinp.dta
 gen fertiliser = .
-replace fertiliser = 0 if input != .
-replace fertiliser = 1 if input == "fertilizer" | (input >= 41 and input <= 49)
+replace fertiliser = 0 if input != ""
+replace fertiliser = 1 if input == "fertilizer" | (real(input) >= 41 & real(input) <= 49)
 keep village hhn id plot round unit quantity
-save temp_plotinp.dta, replace
+save /Users/studentuser/Desktop/Ghana/temp_plotinp.dta, replace
 clear
 
 *"""    PLOTINP.DTA
